@@ -1,0 +1,1829 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finanças 360 & Gestão do Casamento</title>
+  <!-- Tailwind CSS via allowlisted gstatic -->
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    /* Custom subtle scrollbar and theme defaults */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(156, 163, 175, 0.4); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(156, 163, 175, 0.6); }
+    .tab-active { border-bottom-color: #059669; color: #059669; font-weight: 600; }
+    .badge-p0 { background-color: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+    .badge-p1 { background-color: #ffedd5; color: #9a3412; border: 1px solid #fed7aa; }
+    .badge-p2 { background-color: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
+    .badge-p3 { background-color: #f3f4f6; color: #374151; border: 1px solid #e5e7eb; }
+    .progress-bar-fill { transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-full flex flex-col font-sans">
+
+  <!-- TOP NAVBAR -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo & Title -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-md shadow-emerald-500/20">
+            <!-- Icon Banknote/Rings -->
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-lg font-bold text-slate-900 tracking-tight leading-tight flex items-center gap-2">
+              Finanças 360
+              <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">Pessoal & Casamento</span>
+            </h1>
+            <p class="text-xs text-slate-500">Controle Operacional, Projeções e Gestão de Contratos</p>
+          </div>
+        </div>
+
+        <!-- Quick Summary & Action Buttons -->
+        <div class="flex items-center gap-3">
+          <div class="hidden md:flex items-center gap-4 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200 text-xs">
+            <div class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span class="text-slate-500">Casamento:</span>
+              <span class="font-bold text-emerald-700" id="nav-wedding-progress">29.4% Pago</span>
+            </div>
+            <div class="h-3 w-px bg-slate-300"></div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-slate-500">Restante:</span>
+              <span class="font-bold text-amber-700" id="nav-wedding-remaining">R$ 52.111,00</span>
+            </div>
+          </div>
+
+          <button onclick="openModal('modal-nova-conta')" class="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-lg text-xs font-semibold shadow-sm transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            Nova Conta
+          </button>
+          <button onclick="openModal('modal-novo-contrato')" class="inline-flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-lg text-xs font-semibold shadow-sm transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            Novo Contrato
+          </button>
+        </div>
+      </div>
+
+      <!-- TABS NAVIGATION -->
+      <nav class="flex space-x-6 border-t border-slate-100 overflow-x-auto text-sm font-medium -mb-px pt-1" id="main-tabs">
+        <button onclick="switchTab('dashboard')" id="tab-btn-dashboard" class="py-3 px-1 border-b-2 font-medium text-xs sm:text-sm text-slate-500 hover:text-slate-700 border-transparent transition-colors flex items-center gap-2 whitespace-nowrap">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+          Visão Geral
+        </button>
+        <button onclick="switchTab('contas')" id="tab-btn-contas" class="py-3 px-1 border-b-2 font-medium text-xs sm:text-sm text-slate-500 hover:text-slate-700 border-transparent transition-colors flex items-center gap-2 whitespace-nowrap">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+          Contas do Mês
+          <span id="badge-contas-pendentes" class="px-1.5 py-0.2 rounded-full text-[10px] bg-amber-100 text-amber-800 font-bold">0</span>
+        </button>
+        <button onclick="switchTab('casamento')" id="tab-btn-casamento" class="py-3 px-1 border-b-2 font-medium text-xs sm:text-sm text-slate-500 hover:text-slate-700 border-transparent transition-colors flex items-center gap-2 whitespace-nowrap">
+          <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          💍 Gestão do Casamento
+          <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-pink-100 text-pink-800 font-bold">16 Contratos</span>
+        </button>
+        <button onclick="switchTab('projecoes')" id="tab-btn-projecoes" class="py-3 px-1 border-b-2 font-medium text-xs sm:text-sm text-slate-500 hover:text-slate-700 border-transparent transition-colors flex items-center gap-2 whitespace-nowrap">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
+          Projeções & Fluxo (2026/2027)
+        </button>
+        <button onclick="switchTab('backup')" id="tab-btn-backup" class="py-3 px-1 border-b-2 font-medium text-xs sm:text-sm text-slate-500 hover:text-slate-700 border-transparent transition-colors flex items-center gap-2 whitespace-nowrap">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+          Backup & Exportar
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- ========================================== -->
+    <!-- TAB 1: DASHBOARD (VISÃO GERAL) -->
+    <!-- ========================================== -->
+    <section id="pane-dashboard" class="space-y-6">
+      <!-- Welcome & Context Header -->
+      <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 rounded-2xl p-6 text-white shadow-lg">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2 text-emerald-400 text-xs font-semibold uppercase tracking-wider mb-1">
+              <span>● Sistema Operacional Financeiro</span>
+              <span class="text-slate-400">|</span>
+              <span id="dashboard-date-indicator">Novembro / 2025</span>
+            </div>
+            <h2 class="text-2xl font-bold tracking-tight">Painel de Controle Financeiro & Casamento</h2>
+            <p class="text-slate-300 text-sm mt-1 max-w-2xl">
+              Acompanhe suas contas operacionais do mês, a evolução dos contratos do casamento e a projeção de alívio com a quitação gradual das dívidas.
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="switchTab('contas')" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-sm transition-all flex items-center gap-2">
+              <span>Ver Contas do Mês</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </button>
+            <button onclick="switchTab('casamento')" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-xl text-xs font-semibold backdrop-blur transition-all flex items-center gap-2 border border-white/20">
+              <span>Aba Casamento</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mini Wedding Progress Inside Hero -->
+        <div class="mt-6 pt-5 border-t border-slate-700/60 grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
+          <div class="bg-white/5 rounded-xl p-3 border border-white/10">
+            <span class="text-slate-400 block mb-0.5">Total Contratos Casamento</span>
+            <span class="text-lg font-bold text-white" id="dash-wed-total">R$ 73.860,35</span>
+          </div>
+          <div class="bg-white/5 rounded-xl p-3 border border-white/10">
+            <span class="text-emerald-400 block mb-0.5">Total Já Pago</span>
+            <span class="text-lg font-bold text-emerald-300" id="dash-wed-paid">R$ 21.749,35</span>
+          </div>
+          <div class="bg-white/5 rounded-xl p-3 border border-white/10">
+            <span class="text-amber-400 block mb-0.5">Falta Pagar</span>
+            <span class="text-lg font-bold text-amber-300" id="dash-wed-remaining">R$ 52.111,00</span>
+          </div>
+          <div class="bg-white/5 rounded-xl p-3 border border-white/10 flex flex-col justify-between">
+            <div class="flex justify-between items-center mb-1">
+              <span class="text-slate-400">Progresso Geral</span>
+              <span class="font-bold text-white" id="dash-wed-percent">29.4%</span>
+            </div>
+            <div class="w-full bg-slate-700 rounded-full h-2 overflow-hidden">
+              <div id="dash-wed-bar" class="bg-gradient-to-r from-emerald-400 to-teal-300 h-2 rounded-full progress-bar-fill" style="width: 29.4%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI METRIC CARDS -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Card 1: Contas do Mês Atual -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between text-slate-500 mb-2">
+            <span class="text-xs font-medium uppercase tracking-wider">Total Contas (Mês Atual)</span>
+            <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+            </div>
+          </div>
+          <div>
+            <div class="text-2xl font-bold text-slate-900" id="dash-kpi-total-mes">R$ 0,00</div>
+            <p class="text-xs text-slate-500 mt-1 flex items-center gap-1">
+              <span class="font-semibold text-slate-700" id="dash-kpi-qtd-contas">0</span> contas registradas no mês
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 2: Já Pago no Mês -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between text-slate-500 mb-2">
+            <span class="text-xs font-medium uppercase tracking-wider">Pago no Mês</span>
+            <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+          </div>
+          <div>
+            <div class="text-2xl font-bold text-emerald-600" id="dash-kpi-pago-mes">R$ 0,00</div>
+            <p class="text-xs text-slate-500 mt-1 flex items-center gap-1">
+              <span class="font-semibold text-emerald-700" id="dash-kpi-qtd-pagas">0</span> contas liquidadas
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 3: Pendente a Pagar no Mês -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between text-slate-500 mb-2">
+            <span class="text-xs font-medium uppercase tracking-wider">A Pagar (Em Aberto)</span>
+            <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+          </div>
+          <div>
+            <div class="text-2xl font-bold text-amber-600" id="dash-kpi-aberto-mes">R$ 0,00</div>
+            <p class="text-xs text-slate-500 mt-1 flex items-center gap-1">
+              <span class="font-semibold text-amber-700" id="dash-kpi-qtd-abertas">0</span> contas pendentes
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 4: Contas Vencidas -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between text-slate-500 mb-2">
+            <span class="text-xs font-medium uppercase tracking-wider">Vencidas</span>
+            <div class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            </div>
+          </div>
+          <div>
+            <div class="text-2xl font-bold text-rose-600" id="dash-kpi-vencido-mes">R$ 0,00</div>
+            <p class="text-xs text-slate-500 mt-1 flex items-center gap-1">
+              <span class="font-semibold text-rose-700" id="dash-kpi-qtd-vencidas">0</span> contas em atraso
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- VISUAL CHARTS AND UPCOMING BILLS -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Upcoming & Attention Bills -->
+        <div class="lg:col-span-2 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+            <div>
+              <h3 class="font-bold text-slate-900 text-sm">Contas em Destaque no Mês</h3>
+              <p class="text-xs text-slate-500">Contas vencidas ou com vencimento próximo para acompanhamento imediato</p>
+            </div>
+            <button onclick="switchTab('contas')" class="text-xs text-emerald-600 hover:text-emerald-700 font-semibold flex items-center gap-1">
+              Ver todas
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+
+          <div class="overflow-x-auto flex-1">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="text-slate-400 font-semibold border-b border-slate-100">
+                  <th class="pb-2">Vencimento</th>
+                  <th class="pb-2">Descrição</th>
+                  <th class="pb-2">Pessoa</th>
+                  <th class="pb-2 text-right">Valor</th>
+                  <th class="pb-2 text-center">Status</th>
+                  <th class="pb-2 text-right">Ação</th>
+                </tr>
+              </thead>
+              <tbody id="dash-table-upcoming" class="divide-y divide-slate-100">
+                <!-- Injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Wedding Summary Widget -->
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+              <div>
+                <h3 class="font-bold text-slate-900 text-sm">Contratos do Casamento</h3>
+                <p class="text-xs text-slate-500">Status dos 16 fornecedores</p>
+              </div>
+              <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">Prioridades</span>
+            </div>
+
+            <!-- Priority Breakdown -->
+            <div class="space-y-3">
+              <div class="flex items-center justify-between text-xs p-2 rounded-xl bg-slate-50 border border-slate-100">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+                  <span class="font-medium text-slate-700">P0 - Urgente / Cerimonial</span>
+                </div>
+                <span class="font-semibold text-slate-900" id="dash-prio-0">R$ 2.820,00</span>
+              </div>
+              <div class="flex items-center justify-between text-xs p-2 rounded-xl bg-slate-50 border border-slate-100">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span>
+                  <span class="font-medium text-slate-700">P1 - Alta Prioridade (Local, Foto, Igreja)</span>
+                </div>
+                <span class="font-semibold text-slate-900" id="dash-prio-1">R$ 14.021,00</span>
+              </div>
+              <div class="flex items-center justify-between text-xs p-2 rounded-xl bg-slate-50 border border-slate-100">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+                  <span class="font-medium text-slate-700">P2 - Média (Vestido, Cantor, Som, etc.)</span>
+                </div>
+                <span class="font-semibold text-slate-900" id="dash-prio-2">R$ 19.519,35</span>
+              </div>
+              <div class="flex items-center justify-between text-xs p-2 rounded-xl bg-slate-50 border border-slate-100">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
+                  <span class="font-medium text-slate-700">P3 / Buffet & Decoração</span>
+                </div>
+                <span class="font-semibold text-slate-900" id="dash-prio-3">R$ 37.500,00</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-5 pt-4 border-t border-slate-100">
+            <button onclick="switchTab('casamento')" class="w-full bg-slate-900 hover:bg-slate-800 text-white py-2.5 rounded-xl text-xs font-semibold shadow-sm transition-colors flex items-center justify-center gap-2">
+              <span>Abrir Gestor de Contratos Completo</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: CONTAS DO MÊS (CONTROLE OPERACIONAL) -->
+    <!-- ========================================== -->
+    <section id="pane-contas" class="hidden space-y-6">
+      <!-- Month Navigation & Controls Bar -->
+      <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+        <!-- Month Selector with Arrows -->
+        <div class="flex items-center gap-3">
+          <button onclick="changeMonth(-1)" class="p-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 transition-colors shadow-sm" title="Mês Anterior">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          </button>
+          <div>
+            <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">Competência Selecionada</span>
+            <div class="flex items-center gap-2">
+              <select id="select-month" onchange="onSelectMonthChange(this.value)" class="text-base sm:text-lg font-bold text-slate-900 bg-transparent border-0 focus:ring-0 p-0 cursor-pointer">
+                <!-- Options populated dynamically -->
+              </select>
+              <span id="current-month-badge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Mês Atual</span>
+            </div>
+          </div>
+          <button onclick="changeMonth(1)" class="p-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 transition-colors shadow-sm" title="Próximo Mês">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+
+        <!-- Month Financial Summary Strip -->
+        <div class="flex items-center gap-3 overflow-x-auto py-1 text-xs">
+          <div class="bg-slate-50 px-3 py-2 rounded-xl border border-slate-100">
+            <span class="text-slate-400 block text-[10px]">Total Previsto</span>
+            <span class="font-bold text-slate-900" id="month-total-sum">R$ 0,00</span>
+          </div>
+          <div class="bg-emerald-50 px-3 py-2 rounded-xl border border-emerald-100">
+            <span class="text-emerald-600 block text-[10px]">Total Pago</span>
+            <span class="font-bold text-emerald-700" id="month-paid-sum">R$ 0,00</span>
+          </div>
+          <div class="bg-amber-50 px-3 py-2 rounded-xl border border-amber-100">
+            <span class="text-amber-600 block text-[10px]">A Pagar</span>
+            <span class="font-bold text-amber-700" id="month-open-sum">R$ 0,00</span>
+          </div>
+          <div class="bg-rose-50 px-3 py-2 rounded-xl border border-rose-100">
+            <span class="text-rose-600 block text-[10px]">Vencido</span>
+            <span class="font-bold text-rose-700" id="month-overdue-sum">R$ 0,00</span>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex items-center gap-2">
+          <button onclick="autoPopulateMonthFromProjection()" class="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-xl text-xs font-semibold transition-colors" title="Puxa contas previstas na planilha para este mês caso ainda não existam">
+            <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            Importar Projeção
+          </button>
+          <button onclick="openModal('modal-nova-conta')" class="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-semibold shadow-sm transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            Nova Conta
+          </button>
+        </div>
+      </div>
+
+      <!-- Filters & Search Bar -->
+      <div class="bg-white p-3 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+        <div class="relative w-full sm:w-72">
+          <input type="text" id="filter-search-contas" oninput="renderBillsTable()" placeholder="Buscar conta, banco ou categoria..." class="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500 text-xs">
+          <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </div>
+
+        <div class="flex items-center gap-2 w-full sm:w-auto overflow-x-auto">
+          <!-- Status Filter Pills -->
+          <div class="inline-flex rounded-xl bg-slate-100 p-0.5 border border-slate-200">
+            <button onclick="setStatusFilter('TODOS')" id="btn-filter-status-TODOS" class="px-2.5 py-1 rounded-lg font-medium text-slate-900 bg-white shadow-xs">Todos</button>
+            <button onclick="setStatusFilter('EM ABERTO')" id="btn-filter-status-EM-ABERTO" class="px-2.5 py-1 rounded-lg font-medium text-slate-600 hover:text-slate-900">Em Aberto</button>
+            <button onclick="setStatusFilter('VENCIDO')" id="btn-filter-status-VENCIDO" class="px-2.5 py-1 rounded-lg font-medium text-slate-600 hover:text-slate-900">Vencidos</button>
+            <button onclick="setStatusFilter('PAGO')" id="btn-filter-status-PAGO" class="px-2.5 py-1 rounded-lg font-medium text-slate-600 hover:text-slate-900">Pagos</button>
+          </div>
+
+          <!-- Person Filter (Física / Jurídica) -->
+          <select id="filter-person" onchange="renderBillsTable()" class="bg-slate-100 border-0 rounded-xl text-xs py-1.5 px-3 font-medium text-slate-700 focus:ring-2 focus:ring-emerald-500">
+            <option value="TODAS">Pessoa: Todas</option>
+            <option value="Fisica">Física</option>
+            <option value="Júridica">Jurídica (MEI/Empresa)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Bills Main Table -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 text-slate-500 font-semibold uppercase tracking-wider border-b border-slate-200">
+              <tr>
+                <th class="py-3 px-4">Vencimento</th>
+                <th class="py-3 px-4">Descrição</th>
+                <th class="py-3 px-4">Pessoa</th>
+                <th class="py-3 px-4">Banco / Forma</th>
+                <th class="py-3 px-4 text-right">Valor</th>
+                <th class="py-3 px-4 text-center">Status</th>
+                <th class="py-3 px-4">Data Pagamento</th>
+                <th class="py-3 px-4 text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="contas-table-body" class="divide-y divide-slate-100">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Empty State -->
+        <div id="contas-empty-state" class="hidden p-12 text-center">
+          <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 mx-auto flex items-center justify-center mb-3">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          </div>
+          <h4 class="font-bold text-slate-700 text-sm">Nenhuma conta encontrada</h4>
+          <p class="text-xs text-slate-500 mt-1 max-w-sm mx-auto">Não há contas cadastradas para este mês ou com os filtros selecionados.</p>
+          <div class="mt-4 flex items-center justify-center gap-2">
+            <button onclick="autoPopulateMonthFromProjection()" class="bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1.5 rounded-xl text-xs font-semibold hover:bg-emerald-100 transition-colors">
+              Puxar Contas da Projeção
+            </button>
+            <button onclick="openModal('modal-nova-conta')" class="bg-emerald-600 text-white px-3 py-1.5 rounded-xl text-xs font-semibold hover:bg-emerald-700 transition-colors">
+              + Cadastrar Manualmente
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: GESTÃO DO CASAMENTO (CONTRATOS & DESPESAS) -->
+    <!-- ========================================== -->
+    <section id="pane-casamento" class="hidden space-y-6">
+      <!-- Wedding Master Banner -->
+      <div class="bg-gradient-to-r from-rose-900 via-pink-900 to-indigo-950 rounded-2xl p-6 text-white shadow-lg">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2 text-pink-300 text-xs font-semibold uppercase tracking-wider mb-1">
+              <span>💍 Planejamento Financeiro do Casamento</span>
+              <span class="text-pink-400/60">|</span>
+              <span>16 Contratos Mapeados</span>
+            </div>
+            <h2 class="text-2xl font-bold tracking-tight">Gestão de Contratos & Despesas do Casamento</h2>
+            <p class="text-pink-100/80 text-sm mt-1 max-w-2xl">
+              Controle individual de cada fornecedor: quanto foi contratado, o que já foi pago e o saldo devedor restante até a data do grande dia.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="openModal('modal-novo-contrato')" class="bg-white hover:bg-pink-50 text-pink-900 px-4 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-all flex items-center gap-2">
+              <svg class="w-4 h-4 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              + Novo Contrato / Fornecedor
+            </button>
+          </div>
+        </div>
+
+        <!-- Big Global Progress Bar -->
+        <div class="mt-6 bg-white/10 rounded-2xl p-4 border border-white/10 backdrop-blur-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2 text-xs">
+            <div class="flex items-center gap-2">
+              <span class="text-pink-200">Progresso de Quitação Total:</span>
+              <span class="text-base font-extrabold text-white" id="wed-banner-percent">29.4%</span>
+            </div>
+            <div class="flex items-center gap-3 text-xs">
+              <span class="text-emerald-300"><b>Pago:</b> <span id="wed-banner-paid">R$ 21.749,35</span></span>
+              <span class="text-pink-200">•</span>
+              <span class="text-amber-300"><b>Falta Pagar:</b> <span id="wed-banner-remaining">R$ 52.111,00</span></span>
+            </div>
+          </div>
+          <div class="w-full bg-black/30 rounded-full h-3 overflow-hidden p-0.5">
+            <div id="wed-banner-progress-bar" class="bg-gradient-to-r from-emerald-400 via-teal-300 to-pink-400 h-2 rounded-full progress-bar-fill" style="width: 29.4%"></div>
+          </div>
+        </div>
+
+        <!-- Quick Metrics Grid -->
+        <div class="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+          <div class="bg-white/5 rounded-xl p-3 border border-white/10">
+            <span class="text-pink-200 block text-[11px]">Total Contratado</span>
+            <span class="text-lg font-bold text-white" id="wed-kpi-total">R$ 73.860,35</span>
+          </div>
+          <div class="bg-white/5 rounded-xl p-3 border border-white/10">
+            <span class="text-emerald-300 block text-[11px]">Quitados (100% Pagos)</span>
+            <span class="text-lg font-bold text-emerald-300" id="wed-kpi-quitados">4 contratos</span>
+          </div>
+          <div class="bg-white/5 rounded-xl p-3 border border-white/10">
+            <span class="text-amber-300 block text-[11px]">Em Andamento</span>
+            <span class="text-lg font-bold text-amber-300" id="wed-kpi-andamento">10 contratos</span>
+          </div>
+          <div class="bg-white/5 rounded-xl p-3 border border-white/10">
+            <span class="text-slate-300 block text-[11px]">A Iniciar (0% Pago)</span>
+            <span class="text-lg font-bold text-slate-200" id="wed-kpi-iniciar">2 contratos</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wedding Contracts Filter & Toolbar -->
+      <div class="bg-white p-3 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+        <div class="relative w-full sm:w-72">
+          <input type="text" id="filter-search-wed" oninput="renderWeddingContracts()" placeholder="Buscar fornecedor (ex: Festa, Foto, Som)..." class="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-pink-500 text-xs">
+          <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </div>
+
+        <div class="flex items-center gap-2 w-full sm:w-auto overflow-x-auto">
+          <!-- Status Filter -->
+          <div class="inline-flex rounded-xl bg-slate-100 p-0.5 border border-slate-200">
+            <button onclick="setWedStatusFilter('TODOS')" id="btn-wed-status-TODOS" class="px-2.5 py-1 rounded-lg font-medium text-slate-900 bg-white shadow-xs">Todos</button>
+            <button onclick="setWedStatusFilter('Quitado')" id="btn-wed-status-Quitado" class="px-2.5 py-1 rounded-lg font-medium text-slate-600 hover:text-slate-900">Quitados</button>
+            <button onclick="setWedStatusFilter('Em Pagamento')" id="btn-wed-status-Em-Pagamento" class="px-2.5 py-1 rounded-lg font-medium text-slate-600 hover:text-slate-900">Em Pagamento</button>
+            <button onclick="setWedStatusFilter('A Iniciar')" id="btn-wed-status-A-Iniciar" class="px-2.5 py-1 rounded-lg font-medium text-slate-600 hover:text-slate-900">A Iniciar</button>
+          </div>
+
+          <!-- Priority Filter -->
+          <select id="filter-wed-prio" onchange="renderWeddingContracts()" class="bg-slate-100 border-0 rounded-xl text-xs py-1.5 px-3 font-medium text-slate-700 focus:ring-2 focus:ring-pink-500">
+            <option value="TODAS">Prioridade: Todas</option>
+            <option value="0">P0 - Urgente</option>
+            <option value="1">P1 - Alta</option>
+            <option value="2">P2 - Média</option>
+            <option value="3">P3 - Baixa / Buffet</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Contracts Grid (Cards Interativos) -->
+      <div id="wedding-contracts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Injected dynamically -->
+      </div>
+
+      <!-- Wedding Monthly Cash Flow & Dedication -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
+          <div>
+            <h3 class="font-bold text-slate-900 text-sm">Cronograma Mensal de Desembolso (2026 a Maio/2027)</h3>
+            <p class="text-xs text-slate-500">Previsão mês a mês dos pagamentos planejados para os fornecedores do casamento</p>
+          </div>
+          <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">Renda Dedicada Mês a Mês</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs whitespace-nowrap">
+            <thead class="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200">
+              <tr id="wed-schedule-header">
+                <th class="py-2.5 px-3">Fornecedor</th>
+                <!-- Month headers injected dynamically -->
+                <th class="py-2.5 px-3 text-right">Total Pago</th>
+                <th class="py-2.5 px-3 text-right">Falta Pagar</th>
+                <th class="py-2.5 px-3 text-right">Contrato</th>
+              </tr>
+            </thead>
+            <tbody id="wed-schedule-body" class="divide-y divide-slate-100">
+              <!-- Populated dynamically -->
+            </tbody>
+            <tfoot class="bg-slate-50 font-bold border-t-2 border-slate-300" id="wed-schedule-footer">
+              <!-- Totals row injected dynamically -->
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 4: PROJEÇÕES & FLUXO (2026/2027) -->
+    <!-- ========================================== -->
+    <section id="pane-projecoes" class="hidden space-y-6">
+      <!-- Projection Header & Year Toggle -->
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <span class="text-xs font-semibold text-emerald-600 uppercase tracking-wider block">Planejamento Estratégico</span>
+          <h2 class="text-xl font-bold text-slate-900 tracking-tight">Projeções de Fluxo de Caixa (2026 - 2027)</h2>
+          <p class="text-xs text-slate-500 mt-1">Visualize suas receitas, despesas fixas, amortização de dívidas e o impacto mensal do casamento.</p>
+        </div>
+
+        <!-- Year Switcher -->
+        <div class="flex items-center gap-2 bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-semibold">
+          <button onclick="setProjectionYear('2026')" id="btn-proj-2026" class="px-4 py-1.5 rounded-lg bg-white text-slate-900 shadow-xs">Ano 2026</button>
+          <button onclick="setProjectionYear('2027')" id="btn-proj-2027" class="px-4 py-1.5 rounded-lg text-slate-600 hover:text-slate-900">Ano 2027</button>
+        </div>
+      </div>
+
+      <!-- Debt Extinction Radar (Alívio de Dívidas) -->
+      <div class="bg-gradient-to-r from-emerald-950 via-teal-900 to-slate-900 rounded-2xl p-5 text-white shadow-sm">
+        <div class="flex items-center gap-2 text-emerald-400 text-xs font-semibold uppercase tracking-wider mb-1">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+          Linha do Tempo de Quitação de Dívidas & Liberação de Renda
+        </div>
+        <h3 class="text-base font-bold text-white">Cronograma de Fim dos Empréstimos e Parcelamentos</h3>
+        <p class="text-xs text-emerald-100/70 mt-0.5">Veja em quais meses as parcelas terminam, reduzindo a carga mensal:</p>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 mt-4 text-xs">
+          <div class="bg-white/10 rounded-xl p-2.5 border border-white/10">
+            <span class="text-emerald-300 font-bold block text-[10px]">Fev / 2026</span>
+            <span class="font-bold text-white block">Empréstimo Bradesco</span>
+            <span class="text-[10px] text-emerald-200">+ R$ 246/mês liberados</span>
+          </div>
+          <div class="bg-white/10 rounded-xl p-2.5 border border-white/10">
+            <span class="text-emerald-300 font-bold block text-[10px]">Mar / 2026</span>
+            <span class="font-bold text-white block">IPVA 2026</span>
+            <span class="text-[10px] text-emerald-200">+ R$ 149/mês liberados</span>
+          </div>
+          <div class="bg-white/10 rounded-xl p-2.5 border border-white/10">
+            <span class="text-emerald-300 font-bold block text-[10px]">Abr / 2026</span>
+            <span class="font-bold text-white block">Empréstimo Picpay</span>
+            <span class="text-[10px] text-emerald-200">+ R$ 274/mês liberados</span>
+          </div>
+          <div class="bg-white/10 rounded-xl p-2.5 border border-white/10">
+            <span class="text-emerald-300 font-bold block text-[10px]">Mai / 2026</span>
+            <span class="font-bold text-white block">Pós-Graduação</span>
+            <span class="text-[10px] text-emerald-200">+ R$ 239/mês liberados</span>
+          </div>
+          <div class="bg-white/10 rounded-xl p-2.5 border border-white/10">
+            <span class="text-emerald-300 font-bold block text-[10px]">Jun / 2026</span>
+            <span class="font-bold text-white block">Fotografia Formatura</span>
+            <span class="text-[10px] text-emerald-200">+ R$ 198/mês liberados</span>
+          </div>
+          <div class="bg-white/10 rounded-xl p-2.5 border border-white/10">
+            <span class="text-pink-300 font-bold block text-[10px]">Mai / 2027</span>
+            <span class="font-bold text-white block">Casamento Quitado!</span>
+            <span class="text-[10px] text-pink-200">+ R$ 3.000/mês liberados</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Projection Table -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div>
+            <h3 class="font-bold text-slate-900 text-sm" id="proj-table-title">Demonstrativo Mensal de Fluxo de Caixa (2026)</h3>
+            <p class="text-xs text-slate-500">Valores consolidados por categoria de despesas e receitas</p>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs whitespace-nowrap">
+            <thead class="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200">
+              <tr id="proj-header-row">
+                <th class="py-2.5 px-3">Item / Categoria</th>
+                <th class="py-2.5 px-2">Dia</th>
+                <!-- Months injected -->
+                <th class="py-2.5 px-3 text-right">Total Ano</th>
+              </tr>
+            </thead>
+            <tbody id="proj-table-body" class="divide-y divide-slate-100">
+              <!-- Populated dynamically -->
+            </tbody>
+            <tfoot class="bg-slate-50 font-bold border-t-2 border-slate-300" id="proj-table-footer">
+              <!-- Summary rows -->
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 5: BACKUP & EXPORTAR -->
+    <!-- ========================================== -->
+    <section id="pane-backup" class="hidden space-y-6">
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <h2 class="text-lg font-bold text-slate-900 mb-1">Backup, Exportação & Dados</h2>
+        <p class="text-xs text-slate-500 mb-6">Todos os pagamentos registrados, novas contas e edições são armazenados automaticamente no seu navegador via LocalStorage. Você também pode baixar cópias de segurança.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Card 1: Export JSON -->
+          <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 flex flex-col justify-between">
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center mb-3">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+              </div>
+              <h3 class="font-bold text-slate-900 text-sm">Exportar Backup Completo</h3>
+              <p class="text-xs text-slate-500 mt-1">Baixa um arquivo JSON com todas as contas, contratos, pagamentos e projeções atualizadas.</p>
+            </div>
+            <button onclick="exportDataJSON()" class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl text-xs font-semibold shadow-sm transition-colors">
+              Baixar Backup JSON
+            </button>
+          </div>
+
+          <!-- Card 2: Import JSON -->
+          <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 flex flex-col justify-between">
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-3">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+              </div>
+              <h3 class="font-bold text-slate-900 text-sm">Restaurar de um Arquivo</h3>
+              <p class="text-xs text-slate-500 mt-1">Carrega um arquivo de backup previamente exportado para restabelecer os dados.</p>
+            </div>
+            <label class="mt-4 w-full text-center bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-xl text-xs font-semibold shadow-sm transition-colors cursor-pointer block">
+              Selecionar Arquivo JSON
+              <input type="file" id="import-json-file" accept=".json" onchange="importDataJSON(event)" class="hidden">
+            </label>
+          </div>
+
+          <!-- Card 3: Reset to Spreadsheet -->
+          <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 flex flex-col justify-between">
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center mb-3">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              </div>
+              <h3 class="font-bold text-slate-900 text-sm">Resetar para Dados da Planilha</h3>
+              <p class="text-xs text-slate-500 mt-1">Descarta modificações locais e recarrega os dados originais importados de Financas pessoais.xlsx.</p>
+            </div>
+            <button onclick="resetToInitialData()" class="mt-4 w-full bg-rose-600 hover:bg-rose-700 text-white py-2 rounded-xl text-xs font-semibold shadow-sm transition-colors">
+              Resetar Dados Originais
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================== -->
+  <!-- MODAL: REGISTRAR PAGAMENTO DE CONTRATO -->
+  <!-- ========================================== -->
+  <div id="modal-pagar-contrato" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div>
+          <h3 class="text-base font-bold text-slate-900">Registrar Pagamento de Contrato</h3>
+          <p class="text-xs text-slate-500" id="modal-pay-contract-name">Fornecedor</p>
+        </div>
+        <button onclick="closeModal('modal-pagar-contrato')" class="text-slate-400 hover:text-slate-600 p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <input type="hidden" id="modal-pay-contract-id">
+
+      <!-- Summary Info Box -->
+      <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs space-y-1.5">
+        <div class="flex justify-between"><span class="text-slate-500">Valor Total do Contrato:</span><span class="font-bold text-slate-800" id="modal-pay-total-val">R$ 0,00</span></div>
+        <div class="flex justify-between"><span class="text-slate-500">Valor Já Pago:</span><span class="font-bold text-emerald-600" id="modal-pay-paid-val">R$ 0,00</span></div>
+        <div class="flex justify-between"><span class="text-slate-500">Saldo Restante (Falta):</span><span class="font-bold text-amber-600" id="modal-pay-remaining-val">R$ 0,00</span></div>
+      </div>
+
+      <!-- Inputs -->
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Valor da Parcela / Pagamento (R$)*</label>
+          <input type="number" step="0.01" id="modal-pay-amount" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500 text-sm font-bold text-slate-900" placeholder="0.00">
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Data do Pagamento*</label>
+          <input type="date" id="modal-pay-date" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500 text-xs">
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Observação / Comprovante (opcional)</label>
+          <input type="text" id="modal-pay-notes" placeholder="Ex: Parcela 2/5 via Pix Bradesco" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500 text-xs">
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
+        <button onclick="closeModal('modal-pagar-contrato')" class="px-4 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors">Cancelar</button>
+        <button onclick="confirmRegisterContractPayment()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition-colors">Confirmar Pagamento</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: NOVO CONTRATO DO CASAMENTO -->
+  <!-- ========================================== -->
+  <div id="modal-novo-contrato" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div>
+          <h3 class="text-base font-bold text-slate-900">Novo Contrato do Casamento</h3>
+          <p class="text-xs text-slate-500">Cadastre um novo fornecedor ou serviço</p>
+        </div>
+        <button onclick="closeModal('modal-novo-contrato')" class="text-slate-400 hover:text-slate-600 p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Nome do Fornecedor / Serviço*</label>
+          <input type="text" id="new-wed-name" placeholder="Ex: Alianças, Lembrancinhas, Banda..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-pink-500 text-xs">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Valor do Contrato (R$)*</label>
+            <input type="number" step="0.01" id="new-wed-total" placeholder="0.00" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-pink-500 text-xs font-semibold">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Valor Já Pago (R$)</label>
+            <input type="number" step="0.01" id="new-wed-paid" placeholder="0.00" value="0" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-pink-500 text-xs">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Prioridade</label>
+            <select id="new-wed-prio" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-pink-500 text-xs">
+              <option value="0">P0 - Urgente / Essencial</option>
+              <option value="1">P1 - Alta Prioridade</option>
+              <option value="2" selected>P2 - Média Prioridade</option>
+              <option value="3">P3 - Baixa Prioridade</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Dia de Vencimento</label>
+            <input type="text" id="new-wed-day" placeholder="Ex: 10 ou Flexível" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-pink-500 text-xs">
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
+        <button onclick="closeModal('modal-novo-contrato')" class="px-4 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors">Cancelar</button>
+        <button onclick="saveNewWeddingContract()" class="px-4 py-2 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-xs font-semibold shadow-sm transition-colors">Salvar Contrato</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: NOVA CONTA DO MÊS -->
+  <!-- ========================================== -->
+  <div id="modal-nova-conta" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div>
+          <h3 class="text-base font-bold text-slate-900">Cadastrar Nova Conta do Mês</h3>
+          <p class="text-xs text-slate-500">Adicione uma despesa ou compromisso no fluxo de contas</p>
+        </div>
+        <button onclick="closeModal('modal-nova-conta')" class="text-slate-400 hover:text-slate-600 p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Descrição da Conta*</label>
+          <input type="text" id="new-bill-desc" placeholder="Ex: Aluguel, Parcela Carro, Mercado..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500 text-xs">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Valor (R$)*</label>
+            <input type="number" step="0.01" id="new-bill-amount" placeholder="0.00" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500 text-xs font-semibold">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Data de Vencimento*</label>
+            <input type="date" id="new-bill-due-date" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500 text-xs">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Competência (Mês/Ano)*</label>
+            <input type="month" id="new-bill-comp" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500 text-xs">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Tipo de Pessoa</label>
+            <select id="new-bill-person" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500 text-xs">
+              <option value="Fisica" selected>Física</option>
+              <option value="Júridica">Jurídica (MEI/Empresa)</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Forma / Banco</label>
+            <input type="text" id="new-bill-bank" placeholder="Ex: BB, PicPay, Débito..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500 text-xs">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Status Inicial</label>
+            <select id="new-bill-status" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500 text-xs">
+              <option value="EM ABERTO" selected>Em Aberto</option>
+              <option value="PAGO">Pago</option>
+              <option value="VENCIDO">Vencido</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
+        <button onclick="closeModal('modal-nova-conta')" class="px-4 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors">Cancelar</button>
+        <button onclick="saveNewBill()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition-colors">Salvar Conta</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 bg-slate-900 text-white px-4 py-2.5 rounded-xl shadow-xl text-xs font-semibold flex items-center gap-2 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+    <span id="toast-message">Operação realizada com sucesso!</span>
+  </div>
+
+  <!-- JAVASCRIPT APPLICATION LOGIC -->
+  <script>
+    // INITIAL DATABASE EMBEDDED FROM USER SPREADSHEET
+    const INITIAL_DB = {"wedding":{"months":["2026-02","2026-03","2026-04","2026-05","2026-06","2026-07","2026-08","2026-09","2026-10","2026-11","2026-12","2027-01","2027-02","2027-03","2027-04","2027-05"],"income":[{"name":"Sálario","monthly":{"2026-02":1440.0,"2026-03":520.0,"2026-04":2250.0,"2026-05":2250.0,"2026-06":2250.0,"2026-07":3000.0,"2026-08":3000.0,"2026-09":3000.0,"2026-10":3000.0,"2026-11":7000.0,"2026-12":6277.04,"2027-01":3000.0,"2027-02":3000.0,"2027-03":3000.0,"2027-04":3000.0,"2027-05":3000.0},"total":48987.04},{"name":"Sálario  Ana Clara","monthly":{"2026-02":0.0,"2026-03":0.0,"2026-04":0.0,"2026-05":0.0,"2026-06":0.0,"2026-07":0.0,"2026-08":0.0,"2026-09":0.0,"2026-10":0.0,"2026-11":0.0,"2026-12":1900.0,"2027-01":500.0,"2027-02":500.0,"2027-03":500.0,"2027-04":500.0,"2027-05":500.0},"total":4400.0}],"contracts":[{"id":"wed_12","name":"Local Festa","priority":1,"due_day":"Flexível","contract_value":2700.0,"paid_value":900.0,"remaining_value":1800.0,"status":"Em Pagamento","monthly_schedule":{"2026-02":400.0,"2026-03":0.0,"2026-04":0.0,"2026-05":500.0,"2026-06":0.0,"2026-07":0.0,"2026-08":0.0,"2026-09":0.0,"2026-10":0.0,"2026-11":0.0,"2026-12":0.0,"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0}},{"id":"wed_13","name":"Igreja","priority":1,"due_day":"Flexível","contract_value":1621.0,"paid_value":1621.0,"remaining_value":0.0,"status":"Quitado","monthly_schedule":{"2026-02":0.0,"2026-03":0.0,"2026-04":0.0,"2026-05":0.0,"2026-06":0.0,"2026-07":0.0,"2026-08":0.0,"2026-09":0.0,"2026-10":0.0,"2026-11":0.0,"2026-12":0.0,"2027-01":1621.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0}},{"id":"wed_14","name":"Fotografos","priority":1,"due_day":"24","contract_value":5400.0,"paid_value":5400.0,"remaining_value":0.0,"status":"Quitado","monthly_schedule":{"2026-02":1040.0,"2026-03":520.0,"2026-04":0.0,"2026-05":0.0,"2026-06":0.0,"2026-07":0.0,"2026-08":0.0,"2026-09":0.0,"2026-10":0.0,"2026-11":0.0,"2026-12":0.0,"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":3840.0,"2027-05":0.0}},{"id":"wed_15","name":"Cartorio","priority":1,"due_day":"Flexível","contract_value":1500.0,"paid_value":1500.0,"remaining_value":0.0,"status":"Quitado","monthly_schedule":{"2026-02":0.0,"2026-03":0.0,"2026-04":0.0,"2026-05":0.0,"2026-06":0.0,"2026-07":0.0,"2026-08":0.0,"2026-09":0.0,"2026-10":0.0,"2026-11":0.0,"2026-12":0.0,"2027-01":1500.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0}},{"id":"wed_16","name":"Vestido","priority":2,"due_day":"Flexível","contract_value":5500.0,"paid_value":700.0,"remaining_value":4800.0,"status":"Em Pagamento","monthly_schedule":{"2026-02":0.0,"2026-03":0.0,"2026-04":0.0,"2026-05":0.0,"2026-06":0.0,"2026-07":0.0,"2026-08":0.0,"2026-09":0.0,"2026-10":0.0,"2026-11":700.0,"2026-12":0.0,"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0}},{"id":"wed_17","name":"Dia da Noiva","priority":2,"due_day":"Flexível","contract_value":2200.0,"paid_value":2200.0,"remaining_value":0.0,"status":"Quitado","monthly_schedule":{"2026-02":0.0,"2026-03":0.0,"2026-04":0.0,"2026-05":220.0,"2026-06":0.0,"2026-07":0.0,"2026-08":660.0,"2026-09":220.0,"2026-10":220.0,"2026-11":0.0,"2026-12":0.0,"2027-01":0.0,"2027-02":220.0,"2027-03":220.0,"2027-04":220.0,"2027-05":220.0}},{"id":"wed_18","name":"Terno Noivo","priority":2,"due_day":"Flexível","contract_value":700.0,"paid_value":300.0,"remaining_value":400.0,"status":"Em Pagamento","monthly_schedule":{"2026-02":0.0,"2026-03":0.0,"2026-04":0.0,"2026-05":0.0,"2026-06":0.0,"2026-07":0.0,"2026-08":0.0,"2026-09":0.0,"2026-10":0.0,"2026-11":300.0,"2026-12":0.0,"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0}},{"id":"wed_19","name":"Cantor","priority":2,"due_day":"Flexível","contract_value":3800.0,"paid_value":0.0,"remaining_value":3800.0,"status":"A Iniciar","monthly_schedule":{"2026-02":0.0,"2026-03":0.0,"2026-04":0.0,"2026-05":0.0,"2026-06":0.0,"2026-07":0.0,"2026-08":0.0,"2026-09":0.0,"2026-10":0.0,"2026-11":0.0,"2026-12":0.0,"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0}},{"id":"wed_20","name":"Som","priority":2,"due_day":"Flexível","contract_value":5800.0,"paid_value":1500.0,"remaining_value":4300.0,"status":"Em Pagamento","monthly_schedule":{"2026-02":0.0,"2026-03":0.0,"2026-04":0.0,"2026-05":0.0,"2026-06":0.0,"2026-07":1500.0,"2026-08":0.0,"2026-09":0.0,"2026-10":0.0,"2026-11":0.0,"2026-12":0.0,"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0}},{"id":"wed_21","name":"Convites","priority":2,"due_day":"Flexível","contract_value":1519.35,"paid_value":1519.35,"remaining_value":0.0,"status":"Quitado","monthly_schedule":{"2026-02":0.0,"2026-03":0.0,"2026-04":506.45,"2026-05":506.45,"2026-06":506.45,"2026-07":0.0,"2026-08":0.0,"2026-09":0.0,"2026-10":0.0,"2026-11":0.0,"2026-12":0.0,"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0}},{"id":"wed_22","name":"Comida","priority":2,"due_day":"Flexível","contract_value":15000.0,"paid_value":1500.0,"remaining_value":13500.0,"status":"Em Pagamento","monthly_schedule":{"2026-02":0.0,"2026-03":0.0,"2026-04":0.0,"2026-05":0.0,"2026-06":0.0,"2026-07":0.0,"2026-08":0.0,"2026-09":1500.0,"2026-10":0.0,"2026-11":0.0,"2026-12":0.0,"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0}},{"id":"wed_23","name":"Decoração","priority":3,"due_day":"Flexível","contract_value":15000.0,"paid_value":1500.0,"remaining_value":13500.0,"status":"Em Pagamento","monthly_schedule":{"2026-02":0.0,"2026-03":0.0,"2026-04":0.0,"2026-05":0.0,"2026-06":0.0,"2026-07":0.0,"2026-08":0.0,"2026-09":1500.0,"2026-10":0.0,"2026-11":0.0,"2026-12":0.0,"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0}},{"id":"wed_24","name":"Drink","priority":3,"due_day":"Flexível","contract_value":3500.0,"paid_value":500.0,"remaining_value":3000.0,"status":"Em Pagamento","monthly_schedule":{"2026-02":0.0,"2026-03":0.0,"2026-04":0.0,"2026-05":0.0,"2026-06":0.0,"2026-07":0.0,"2026-08":0.0,"2026-09":0.0,"2026-10":0.0,"2026-11":0.0,"2026-12":500.0,"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0}},{"id":"wed_25","name":"Doces e Bolo","priority":3,"due_day":"Flexível","contract_value":4000.0,"paid_value":0.0,"remaining_value":4000.0,"status":"A Iniciar","monthly_schedule":{"2026-02":0.0,"2026-03":0.0,"2026-04":0.0,"2026-05":0.0,"2026-06":0.0,"2026-07":0.0,"2026-08":0.0,"2026-09":0.0,"2026-10":0.0,"2026-11":0.0,"2026-12":0.0,"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0}},{"id":"wed_26","name":"Cerimonialista","priority":0,"due_day":"Flexível","contract_value":2820.0,"paid_value":2409.0,"remaining_value":411.0,"status":"Em Pagamento","monthly_schedule":{"2026-02":389.0,"2026-03":0.0,"2026-04":350.0,"2026-05":0.0,"2026-06":0.0,"2026-07":420.0,"2026-08":670.0,"2026-09":440.0,"2026-10":140.0,"2026-11":0.0,"2026-12":0.0,"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0}},{"id":"wed_27","name":"Vídeo Maker","priority":1,"due_day":"Flexível","contract_value":2800.0,"paid_value":200.0,"remaining_value":2600.0,"status":"Em Pagamento","monthly_schedule":{"2026-02":0.0,"2026-03":0.0,"2026-04":0.0,"2026-05":0.0,"2026-06":200.0,"2026-07":0.0,"2026-08":0.0,"2026-09":0.0,"2026-10":0.0,"2026-11":0.0,"2026-12":0.0,"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0}}]},"monthly_bills":[{"id":"conta_2","description":"Spotify","person":"Fisica","competency":"2025-10","due_date":"2025-10-02","payment_type":"A vista","installment":"x","amount":23.0,"status":"PAGO","paid_date":"","bank":""},{"id":"conta_3","description":"Odontologia","person":"Fisica","competency":"2025-10","due_date":"2025-10-02","payment_type":"A vista","installment":"x","amount":130.0,"status":"PAGO","paid_date":"","bank":""},{"id":"conta_4","description":"Aluguel","person":"Fisica","competency":"2025-10","due_date":"2025-10-05","payment_type":"A vista","installment":"x","amount":1050.0,"status":"PAGO","paid_date":"","bank":""},{"id":"conta_5","description":"Emprestimo Pessoal Picpay","person":"Fisica","competency":"2025-10","due_date":"2025-10-13","payment_type":"A vista","installment":"x","amount":119.53,"status":"PAGO","paid_date":"","bank":""},{"id":"conta_6","description":"Emprestimo Bradesco","person":"Fisica","competency":"2025-10","due_date":"2025-10-13","payment_type":"A vista","installment":"x","amount":150.0,"status":"VENCIDO","paid_date":"","bank":""},{"id":"conta_7","description":"Fotos Formatura","person":"Fisica","competency":"2025-10","due_date":"2025-10-15","payment_type":"A vista","installment":"x","amount":0.0,"status":"PAGO","paid_date":"","bank":""},{"id":"conta_8","description":"C/Crédito Neon","person":"Fisica","competency":"2025-10","due_date":"2025-10-15","payment_type":"A vista","installment":"x","amount":268.23,"status":"PAGO","paid_date":"","bank":""},{"id":"conta_9","description":"Internet","person":"Júridica","competency":"2025-10","due_date":"2025-10-19","payment_type":"A vista","installment":"x","amount":83.0,"status":"PAGO","paid_date":"","bank":""},{"id":"conta_10","description":"MEI","person":"Júridica","competency":"2025-09","due_date":"2025-10-20","payment_type":"A vista","installment":"x","amount":80.9,"status":"VENCIDO","paid_date":"","bank":""},{"id":"conta_11","description":"C/Crédito Picpay","person":"Fisica","competency":"2025-10","due_date":"2025-10-20","payment_type":"A vista","installment":"x","amount":924.03,"status":"PAGO","paid_date":"","bank":""},{"id":"conta_12","description":"Emprestimo Picpay","person":"Fisica","competency":"2025-10","due_date":"2025-10-23","payment_type":"A vista","installment":"x","amount":192.11,"status":"VENCIDO","paid_date":"","bank":""},{"id":"conta_13","description":"Compra pra Casa","person":"Fisica","competency":"2025-10","due_date":"2025-10-24","payment_type":"A vista","installment":"x","amount":300.0,"status":"PAGO","paid_date":"","bank":""},{"id":"conta_14","description":"Carro","person":"Fisica","competency":"2025-10","due_date":"2025-10-25","payment_type":"A vista","installment":"x","amount":2700.0,"status":"PAGO","paid_date":"","bank":""},{"id":"conta_15","description":"C/Crédito Banco do Brasil","person":"Fisica","competency":"2025-10","due_date":"2025-10-25","payment_type":"A vista","installment":"x","amount":1415.23,"status":"PAGO","paid_date":"","bank":""},{"id":"conta_16","description":"Pós Graduação","person":"Fisica","competency":"2025-10","due_date":"2025-10-30","payment_type":"A vista","installment":"x","amount":239.84,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_17","description":"Cabelo","person":"Fisica","competency":"2025-10","due_date":"2025-10-31","payment_type":"A vista","installment":"x","amount":70.0,"status":"PAGO","paid_date":"","bank":""},{"id":"conta_18","description":"Spotify","person":"Fisica","competency":"2025-11","due_date":"2025-11-02","payment_type":"A vista","installment":"x","amount":23.0,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_19","description":"Odontologia","person":"Fisica","competency":"2025-11","due_date":"2025-11-02","payment_type":"A vista","installment":"x","amount":0.0,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_20","description":"Aluguel","person":"Fisica","competency":"2025-11","due_date":"2025-11-05","payment_type":"A vista","installment":"x","amount":1050.0,"status":"PAGO","paid_date":"05/11/2025","bank":""},{"id":"conta_21","description":"Emprestimo Pessoal Picpay","person":"Fisica","competency":"2025-11","due_date":"2025-11-13","payment_type":"A vista","installment":"x","amount":119.53,"status":"PAGO","paid_date":"","bank":""},{"id":"conta_22","description":"Emprestimo Bradesco","person":"Fisica","competency":"2025-11","due_date":"2025-11-13","payment_type":"A vista","installment":"x","amount":150.0,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_23","description":"C/Crédito Neon","person":"Fisica","competency":"2025-11","due_date":"2025-11-17","payment_type":"A vista","installment":"x","amount":437.79,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_24","description":"Internet","person":"Júridica","competency":"2025-11","due_date":"2025-11-19","payment_type":"A vista","installment":"x","amount":83.0,"status":"VENCIDO","paid_date":"","bank":""},{"id":"conta_25","description":"MEI","person":"Júridica","competency":"2025-10","due_date":"2025-11-20","payment_type":"A vista","installment":"x","amount":80.9,"status":"VENCIDO","paid_date":"","bank":""},{"id":"conta_26","description":"C/Crédito Picpay","person":"Fisica","competency":"2025-11","due_date":"2025-11-20","payment_type":"A vista","installment":"x","amount":1101.02,"status":"PAGO","paid_date":"","bank":""},{"id":"conta_27","description":"Fotos Formatura","person":"Fisica","competency":"2025-11","due_date":"2025-11-23","payment_type":"A vista","installment":"x","amount":193.86,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_28","description":"Emprestimo Picpay","person":"Fisica","competency":"2025-11","due_date":"2025-11-23","payment_type":"A vista","installment":"x","amount":192.11,"status":"PAGO","paid_date":"","bank":""},{"id":"conta_29","description":"Compra pra Casa","person":"Fisica","competency":"2025-11","due_date":"2025-11-24","payment_type":"A vista","installment":"x","amount":700.0,"status":"PAGO","paid_date":"","bank":""},{"id":"conta_30","description":"Carro","person":"Fisica","competency":"2025-11","due_date":"2025-11-25","payment_type":"A vista","installment":"x","amount":1200.0,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_31","description":"C/Crédito Banco do Brasil","person":"Fisica","competency":"2025-11","due_date":"2025-11-25","payment_type":"A vista","installment":"x","amount":1814.22,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_32","description":"Cabelo","person":"Fisica","competency":"2025-11","due_date":"2025-11-30","payment_type":"A vista","installment":"x","amount":140.0,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_33","description":"Pós Graduação","person":"Fisica","competency":"2025-11","due_date":"2025-11-30","payment_type":"A vista","installment":"x","amount":239.84,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_34","description":"Spotify","person":"Fisica","competency":"2025-12","due_date":"2025-12-02","payment_type":"A vista","installment":"x","amount":23.0,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_35","description":"Odontologia","person":"Fisica","competency":"2025-12","due_date":"2025-12-02","payment_type":"A vista","installment":"x","amount":0.0,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_36","description":"Aluguel","person":"Fisica","competency":"2025-12","due_date":"2025-12-05","payment_type":"A vista","installment":"x","amount":1050.0,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_37","description":"Emprestimo Bradesco","person":"Fisica","competency":"2025-12","due_date":"2025-12-13","payment_type":"A vista","installment":"x","amount":150.0,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_38","description":"C/Crédito Neon","person":"Fisica","competency":"2025-12","due_date":"2025-12-15","payment_type":"A vista","installment":"x","amount":460.31,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_39","description":"Fotos Formatura","person":"Fisica","competency":"2025-12","due_date":"2025-12-15","payment_type":"A vista","installment":"x","amount":0.0,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_40","description":"Internet","person":"Júridica","competency":"2025-12","due_date":"2025-12-19","payment_type":"A vista","installment":"x","amount":83.0,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_41","description":"C/Crédito Picpay","person":"Fisica","competency":"2025-12","due_date":"2025-12-20","payment_type":"A vista","installment":"x","amount":0.0,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_42","description":"MEI","person":"Júridica","competency":"2025-11","due_date":"2025-12-20","payment_type":"A vista","installment":"x","amount":80.9,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_43","description":"Emprestimo Picpay","person":"Fisica","competency":"2025-12","due_date":"2025-12-15","payment_type":"A vista","installment":"x","amount":274.08,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_44","description":"Compra pra Casa","person":"Fisica","competency":"2025-12","due_date":"2025-12-24","payment_type":"A vista","installment":"x","amount":700.0,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_45","description":"Carro","person":"Fisica","competency":"2025-12","due_date":"2025-12-25","payment_type":"A vista","installment":"x","amount":1200.0,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_46","description":"C/Crédito Banco do Brasil","person":"Fisica","competency":"2025-12","due_date":"2025-12-11","payment_type":"A vista","installment":"x","amount":2000.37,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_47","description":"Pós Graduação","person":"Fisica","competency":"2025-12","due_date":"2025-12-30","payment_type":"A vista","installment":"x","amount":239.84,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_48","description":"Cabelo","person":"Fisica","competency":"2025-12","due_date":"2025-12-31","payment_type":"A vista","installment":"x","amount":70.0,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_49","description":"Emprestimo Bradesco","person":"Fisica","competency":"2026-01","due_date":"2026-01-13","payment_type":"A vista","installment":"x","amount":150.0,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_50","description":"MEI","person":"Júridica","competency":"2025-12","due_date":"2026-01-20","payment_type":"A vista","installment":"x","amount":80.9,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_51","description":"Emprestimo Picpay","person":"Fisica","competency":"2026-01","due_date":"2026-01-15","payment_type":"A vista","installment":"x","amount":274.08,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_52","description":"Pós Graduação","person":"Fisica","competency":"2026-01","due_date":"2026-01-30","payment_type":"A vista","installment":"x","amount":239.84,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_53","description":"Pós Graduação","person":"Fisica","competency":"2026-02","due_date":"2026-02-28","payment_type":"A vista","installment":"x","amount":239.84,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_54","description":"Pós Graduação","person":"Fisica","competency":"2026-03","due_date":"2026-03-30","payment_type":"A vista","installment":"x","amount":239.84,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_55","description":"Pós Graduação","person":"Fisica","competency":"2026-04","due_date":"2026-04-30","payment_type":"A vista","installment":"x","amount":239.84,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_56","description":"Pós Graduação","person":"Fisica","competency":"2026-05","due_date":"2026-05-30","payment_type":"A vista","installment":"x","amount":239.84,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_57","description":"Emprestimo Picpay","person":"Fisica","competency":"2026-02","due_date":"2026-02-15","payment_type":"A vista","installment":"x","amount":274.08,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_58","description":"Emprestimo Picpay","person":"Fisica","competency":"2026-03","due_date":"2026-03-15","payment_type":"A vista","installment":"x","amount":274.08,"status":"EM ABERTO","paid_date":"","bank":""},{"id":"conta_59","description":"Emprestimo Picpay","person":"Fisica","competency":"2026-04","due_date":"2026-04-15","payment_type":"A vista","installment":"x","amount":274.08,"status":"EM ABERTO","paid_date":"","bank":""}],"projection_2026":{"months":["2026-01","2026-02","2026-03","2026-04","2026-05","2026-06","2026-07","2026-08","2026-09","2026-10","2026-11","2026-12"],"expenses":[{"id":"exp26_12","name":"Presentes de Aniversarios","category":"z","due_day":"Variável","monthly":{"2026-01":0.0,"2026-02":0.0,"2026-03":0.0,"2026-04":0.0,"2026-05":0.0,"2026-06":0.0,"2026-07":0.0,"2026-08":0.0,"2026-09":0.0,"2026-10":0.0,"2026-11":0.0,"2026-12":0.0},"total_year":0.0},{"id":"exp26_13","name":"Aluguel","category":"Essencial","due_day":"5","monthly":{"2026-01":1050.0,"2026-02":1150.0,"2026-03":1150.0,"2026-04":1150.0,"2026-05":1150.0,"2026-06":1150.0,"2026-07":1150.0,"2026-08":1150.0,"2026-09":1150.0,"2026-10":1150.0,"2026-11":1150.0,"2026-12":1150.0},"total_year":13700.0},{"id":"exp26_14","name":"Cabelo","category":"Essencial","due_day":"5","monthly":{"2026-01":105.0,"2026-02":105.0,"2026-03":65.0,"2026-04":105.0,"2026-05":105.0,"2026-06":105.0,"2026-07":0.0,"2026-08":105.0,"2026-09":0.0,"2026-10":0.0,"2026-11":0.0,"2026-12":105.0},"total_year":800.0},{"id":"exp26_15","name":"Compra pra Casa","category":"Essencial","due_day":"10","monthly":{"2026-01":400.0,"2026-02":400.0,"2026-03":400.0,"2026-04":0.0,"2026-05":0.0,"2026-06":0.0,"2026-07":0.0,"2026-08":0.0,"2026-09":0.0,"2026-10":0.0,"2026-11":0.0,"2026-12":0.0},"total_year":1200.0},{"id":"exp26_16","name":"Gasolina","category":"Essencial","due_day":"20","monthly":{"2026-01":600.0,"2026-02":600.0,"2026-03":600.0,"2026-04":600.0,"2026-05":600.0,"2026-06":0.0,"2026-07":0.0,"2026-08":0.0,"2026-09":0.0,"2026-10":0.0,"2026-11":0.0,"2026-12":0.0},"total_year":3000.0},{"id":"exp26_17","name":"Consórcio","category":"Essencial","due_day":"Variável","monthly":{"2026-01":0.0,"2026-02":0.0,"2026-03":0.0,"2026-04":200.0,"2026-05":205.0,"2026-06":210.0,"2026-07":215.0,"2026-08":220.0,"2026-09":225.0,"2026-10":250.0,"2026-11":255.0,"2026-12":260.0},"total_year":2040.0},{"id":"exp26_18","name":"Ana Clara","category":"Dividas","due_day":"10","monthly":{"2026-01":161.0,"2026-02":345.0,"2026-03":110.0,"2026-04":640.6,"2026-05":468.98,"2026-06":290.3,"2026-07":290.3,"2026-08":419.98,"2026-09":210.08,"2026-10":210.08,"2026-11":444.69,"2026-12":210.08},"total_year":3801.09},{"id":"exp26_19","name":"C/Crédito Ana Clara","category":"Dividas","due_day":"10","monthly":{"2026-01":0.0,"2026-02":0.0,"2026-03":0.0,"2026-04":0.0,"2026-05":0.0,"2026-06":0.0,"2026-07":0.0,"2026-08":0.0,"2026-09":0.0,"2026-10":0.0,"2026-11":556.7,"2026-12":556.7},"total_year":1113.4},{"id":"exp26_20","name":"Emprestimo Bradesco","category":"Dividas","due_day":"10","monthly":{"2026-01":0.0,"2026-02":246.63,"2026-03":0.0,"2026-04":0.0,"2026-05":0.0,"2026-06":0.0,"2026-07":0.0,"2026-08":0.0,"2026-09":0.0,"2026-10":0.0,"2026-11":0.0,"2026-12":0.0},"total_year":246.63},{"id":"exp26_21","name":"C/Crédito Banco do Brasil","category":"Dividas","due_day":"11","monthly":{"2026-01":2321.13,"2026-02":1679.83,"2026-03":2269.0,"2026-04":120.0,"2026-05":0.0,"2026-06":0.0,"2026-07":0.0,"2026-08":0.0,"2026-09":0.0,"2026-10":0.0,"2026-11":0.0,"2026-12":0.0},"total_year":6389.96},{"id":"exp26_22","name":"C/Crédito Neon","category":"Dividas","due_day":"12","monthly":{"2026-01":288.04,"2026-02":524.44,"2026-03":501.39,"2026-04":500.0,"2026-05":0.0,"2026-06":299.98,"2026-07":435.96,"2026-08":0.0,"2026-09":420.0,"2026-10":0.0,"2026-11":0.0,"2026-12":0.0},"total_year":2969.81},{"id":"exp26_23","name":"Emprestimo Picpay","category":"Dividas","due_day":"15","monthly":{"2026-01":274.08,"2026-02":274.08,"2026-03":274.08,"2026-04":274.08,"2026-05":0.0,"2026-06":0.0,"2026-07":0.0,"2026-08":0.0,"2026-09":0.0,"2026-10":0.0,"2026-11":0.0,"2026-12":0.0},"total_year":1096.32},{"id":"exp26_24","name":"IPVA","category":"Dividas","due_day":"15","monthly":{"2026-01":149.1,"2026-02":149.1,"2026-03":149.1,"2026-04":0.0,"2026-05":0.0,"2026-06":0.0,"2026-07":0.0,"2026-08":0.0,"2026-09":0.0,"2026-10":0.0,"2026-11":0.0,"2026-12":0.0},"total_year":447.3},{"id":"exp26_25","name":"Débito Bradesco","category":"Dividas","due_day":"30","monthly":{"2026-01":0.0,"2026-02":0.0,"2026-03":0.0,"2026-04":0.0,"2026-05":0.0,"2026-06":31.22,"2026-07":31.22,"2026-08":0.0,"2026-09":32.0,"2026-10":0.0,"2026-11":0.0,"2026-12":0.0},"total_year":94.44},{"id":"exp26_26","name":"Parcela do Carro","category":"Dividas","due_day":"19","monthly":{"2026-01":830.0,"2026-02":830.0,"2026-03":830.0,"2026-04":830.0,"2026-05":830.0,"2026-06":920.0,"2026-07":830.0,"2026-08":830.0,"2026-09":830.0,"2026-10":830.0,"2026-11":830.0,"2026-12":830.0},"total_year":10050.0},{"id":"exp26_27","name":"Mounjaro","category":"Dividas","due_day":"10","monthly":{"2026-01":0.0,"2026-02":0.0,"2026-03":0.0,"2026-04":0.0,"2026-05":331.0,"2026-06":332.5,"2026-07":331.0,"2026-08":331.0,"2026-09":331.0,"2026-10":333.0,"2026-11":333.0,"2026-12":333.0},"total_year":2655.5},{"id":"exp26_28","name":"C/Crédito Picpay","category":"Dividas","due_day":"20","monthly":{"2026-01":1074.31,"2026-02":1105.31,"2026-03":1103.0,"2026-04":1100.0,"2026-05":0.0,"2026-06":953.13,"2026-07":680.96,"2026-08":0.0,"2026-09":2400.0,"2026-10":0.0,"2026-11":1700.0,"2026-12":700.0},"total_year":10816.71},{"id":"exp26_29","name":"CRC GO","category":"Dividas","due_day":"30","monthly":{"2026-01":0.0,"2026-02":0.0,"2026-03":0.0,"2026-04":0.0,"2026-05":0.0,"2026-06":0.0,"2026-07":0.0,"2026-08":109.0,"2026-09":109.0,"2026-10":109.0,"2026-11":109.0,"2026-12":0.0},"total_year":436.0},{"id":"exp26_30","name":"Fotografia","category":"Dividas","due_day":"23","monthly":{"2026-01":193.86,"2026-02":198.25,"2026-03":198.25,"2026-04":198.25,"2026-05":198.25,"2026-06":198.25,"2026-07":0.0,"2026-08":0.0,"2026-09":0.0,"2026-10":0.0,"2026-11":0.0,"2026-12":0.0},"total_year":1185.11},{"id":"exp26_31","name":"Pós Graduação","category":"Dividas","due_day":"30","monthly":{"2026-01":239.84,"2026-02":239.84,"2026-03":239.84,"2026-04":239.84,"2026-05":239.84,"2026-06":0.0,"2026-07":0.0,"2026-08":0.0,"2026-09":0.0,"2026-10":0.0,"2026-11":0.0,"2026-12":0.0},"total_year":1199.2},{"id":"exp26_32","name":"IRRF","category":"Dividas","due_day":"30","monthly":{"2026-01":0.0,"2026-02":0.0,"2026-03":0.0,"2026-04":0.0,"2026-05":0.0,"2026-06":350.0,"2026-07":350.0,"2026-08":250.0,"2026-09":250.0,"2026-10":250.0,"2026-11":400.0,"2026-12":400.0},"total_year":2250.0},{"id":"exp26_33","name":"Concurso","category":"Dividas","due_day":"23","monthly":{"2026-01":0.0,"2026-02":0.0,"2026-03":0.0,"2026-04":0.0,"2026-05":0.0,"2026-06":0.0,"2026-07":0.0,"2026-08":0.0,"2026-09":0.0,"2026-10":290.0,"2026-11":0.0,"2026-12":0.0},"total_year":290.0},{"id":"exp26_34","name":"Havan","category":"Dividas","due_day":"20","monthly":{"2026-01":0.0,"2026-02":0.0,"2026-03":0.0,"2026-04":95.22,"2026-05":99.0,"2026-06":99.0,"2026-07":99.0,"2026-08":0.0,"2026-09":0.0,"2026-10":204.69,"2026-11":0.0,"2026-12":0.0},"total_year":596.91},{"id":"exp26_35","name":"Casamento","category":"Casamento","due_day":"Variável","monthly":{"2026-01":0.0,"2026-02":0.0,"2026-03":0.0,"2026-04":856.45,"2026-05":1226.45,"2026-06":706.45,"2026-07":3000.0,"2026-08":3000.0,"2026-09":3000.0,"2026-10":3000.0,"2026-11":3000.0,"2026-12":3000.0},"total_year":20789.35},{"id":"exp26_36","name":"Music","category":"Assinatura","due_day":"7","monthly":{"2026-01":23.0,"2026-02":23.0,"2026-03":23.0,"2026-04":23.0,"2026-05":23.0,"2026-06":23.0,"2026-07":23.0,"2026-08":23.0,"2026-09":23.0,"2026-10":23.0,"2026-11":23.0,"2026-12":23.0},"total_year":276.0},{"id":"exp26_37","name":"Telefone Internet","category":"Assinatura","due_day":"20","monthly":{"2026-01":83.0,"2026-02":83.0,"2026-03":83.0,"2026-04":83.0,"2026-05":83.0,"2026-06":83.0,"2026-07":83.0,"2026-08":83.0,"2026-09":83.0,"2026-10":83.0,"2026-11":83.0,"2026-12":83.0},"total_year":996.0}],"revenues":[{"name":"Sálario","day":"5","monthly":{"2026-01":5500.0,"2026-02":5500.0,"2026-03":5500.0,"2026-04":5500.0,"2026-05":5500.0,"2026-06":5000.0,"2026-07":5000.0,"2026-08":5000.0,"2026-09":5000.0,"2026-10":5000.0,"2026-11":5000.0,"2026-12":5000.0}},{"name":"Outras Receitas","day":"24","monthly":{"2026-01":1500.0,"2026-02":1500.0,"2026-03":1500.0,"2026-04":1500.0,"2026-05":1500.0,"2026-06":1500.0,"2026-07":1500.0,"2026-08":2600.0,"2026-09":1500.0,"2026-10":1500.0,"2026-11":1500.0,"2026-12":1500.0}}]},"projection_2027":{"months":["2027-01","2027-02","2027-03","2027-04","2027-05","2027-06","2027-07","2027-08","2027-09","2027-10","2027-11","2027-12"],"revenues":[{"name":"Sálario","day":"5","monthly":{"2027-01":5000.0,"2027-02":5000.0,"2027-03":5000.0,"2027-04":5000.0,"2027-05":5000.0,"2027-06":5000.0,"2027-07":5000.0,"2027-08":5000.0,"2027-09":5000.0,"2027-10":5000.0,"2027-11":5000.0,"2027-12":5000.0}},{"name":"Outras Receitas","day":"24","monthly":{"2027-01":1500.0,"2027-02":1500.0,"2027-03":2875.0,"2027-04":1500.0,"2027-05":1500.0,"2027-06":1500.0,"2027-07":1500.0,"2027-08":2600.0,"2027-09":1500.0,"2027-10":1500.0,"2027-11":1500.0,"2027-12":1500.0}}],"expenses":[{"id":"exp27_12","name":"Presentes de Aniversarios","category":"z","due_day":"Variável","monthly":{"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0,"2027-06":0.0,"2027-07":0.0,"2027-08":0.0,"2027-09":0.0,"2027-10":0.0,"2027-11":0.0,"2027-12":0.0},"total_year":0.0},{"id":"exp27_13","name":"Aluguel","category":"Essencial","due_day":"5","monthly":{"2027-01":1050.0,"2027-02":1150.0,"2027-03":1150.0,"2027-04":2000.0,"2027-05":2000.0,"2027-06":2000.0,"2027-07":2000.0,"2027-08":2000.0,"2027-09":2000.0,"2027-10":2000.0,"2027-11":2000.0,"2027-12":2000.0},"total_year":21350.0},{"id":"exp27_14","name":"Cabelo","category":"Essencial","due_day":"5","monthly":{"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0,"2027-06":0.0,"2027-07":0.0,"2027-08":0.0,"2027-09":0.0,"2027-10":0.0,"2027-11":0.0,"2027-12":0.0},"total_year":0.0},{"id":"exp27_15","name":"Compra pra Casa","category":"Essencial","due_day":"10","monthly":{"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":400.0,"2027-05":600.0,"2027-06":0.0,"2027-07":0.0,"2027-08":0.0,"2027-09":0.0,"2027-10":0.0,"2027-11":0.0,"2027-12":0.0},"total_year":1000.0},{"id":"exp27_16","name":"Gasolina","category":"Essencial","due_day":"20","monthly":{"2027-01":600.0,"2027-02":600.0,"2027-03":600.0,"2027-04":600.0,"2027-05":600.0,"2027-06":0.0,"2027-07":0.0,"2027-08":0.0,"2027-09":0.0,"2027-10":0.0,"2027-11":0.0,"2027-12":0.0},"total_year":3000.0},{"id":"exp27_17","name":"Consórcio","category":"Essencial","due_day":"Variável","monthly":{"2027-01":265.0,"2027-02":270.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0,"2027-06":0.0,"2027-07":0.0,"2027-08":0.0,"2027-09":0.0,"2027-10":0.0,"2027-11":0.0,"2027-12":0.0},"total_year":535.0},{"id":"exp27_18","name":"Ana Clara","category":"Dividas","due_day":"10","monthly":{"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0,"2027-06":0.0,"2027-07":0.0,"2027-08":0.0,"2027-09":0.0,"2027-10":0.0,"2027-11":0.0,"2027-12":0.0},"total_year":0.0},{"id":"exp27_19","name":"C/Crédito Ana Clara","category":"Dividas","due_day":"10","monthly":{"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0,"2027-06":0.0,"2027-07":0.0,"2027-08":0.0,"2027-09":0.0,"2027-10":0.0,"2027-11":0.0,"2027-12":0.0},"total_year":0.0},{"id":"exp27_20","name":"Emprestimo Bradesco","category":"Dividas","due_day":"10","monthly":{"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0,"2027-06":0.0,"2027-07":0.0,"2027-08":0.0,"2027-09":0.0,"2027-10":0.0,"2027-11":0.0,"2027-12":0.0},"total_year":0.0},{"id":"exp27_21","name":"C/Crédito Banco do Brasil","category":"Dividas","due_day":"11","monthly":{"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0,"2027-06":0.0,"2027-07":0.0,"2027-08":0.0,"2027-09":0.0,"2027-10":0.0,"2027-11":0.0,"2027-12":0.0},"total_year":0.0},{"id":"exp27_22","name":"C/Crédito Neon","category":"Dividas","due_day":"12","monthly":{"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0,"2027-06":0.0,"2027-07":0.0,"2027-08":0.0,"2027-09":0.0,"2027-10":0.0,"2027-11":0.0,"2027-12":0.0},"total_year":0.0},{"id":"exp27_23","name":"Emprestimo Picpay","category":"Dividas","due_day":"15","monthly":{"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0,"2027-06":0.0,"2027-07":0.0,"2027-08":0.0,"2027-09":0.0,"2027-10":0.0,"2027-11":0.0,"2027-12":0.0},"total_year":0.0},{"id":"exp27_24","name":"IPVA","category":"Dividas","due_day":"15","monthly":{"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0,"2027-06":0.0,"2027-07":0.0,"2027-08":0.0,"2027-09":0.0,"2027-10":0.0,"2027-11":0.0,"2027-12":0.0},"total_year":0.0},{"id":"exp27_25","name":"Débito Bradesco","category":"Dividas","due_day":"30","monthly":{"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0,"2027-06":0.0,"2027-07":0.0,"2027-08":0.0,"2027-09":0.0,"2027-10":0.0,"2027-11":0.0,"2027-12":0.0},"total_year":0.0},{"id":"exp27_26","name":"Parcela do Carro","category":"Dividas","due_day":"19","monthly":{"2027-01":830.0,"2027-02":830.0,"2027-03":830.0,"2027-04":830.0,"2027-05":830.0,"2027-06":830.0,"2027-07":830.0,"2027-08":830.0,"2027-09":830.0,"2027-10":830.0,"2027-11":830.0,"2027-12":830.0},"total_year":9960.0},{"id":"exp27_27","name":"Mounjaro","category":"Dividas","due_day":"10","monthly":{"2027-01":333.0,"2027-02":333.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0,"2027-06":0.0,"2027-07":0.0,"2027-08":0.0,"2027-09":0.0,"2027-10":0.0,"2027-11":0.0,"2027-12":0.0},"total_year":666.0},{"id":"exp27_28","name":"C/Crédito Picpay","category":"Dividas","due_day":"20","monthly":{"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0,"2027-06":0.0,"2027-07":0.0,"2027-08":0.0,"2027-09":0.0,"2027-10":0.0,"2027-11":0.0,"2027-12":0.0},"total_year":0.0},{"id":"exp27_29","name":"CRC GO","category":"Dividas","due_day":"30","monthly":{"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0,"2027-06":0.0,"2027-07":0.0,"2027-08":0.0,"2027-09":0.0,"2027-10":0.0,"2027-11":0.0,"2027-12":0.0},"total_year":0.0},{"id":"exp27_30","name":"Fotografia","category":"Dividas","due_day":"23","monthly":{"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0,"2027-06":0.0,"2027-07":0.0,"2027-08":0.0,"2027-09":0.0,"2027-10":0.0,"2027-11":0.0,"2027-12":0.0},"total_year":0.0},{"id":"exp27_31","name":"Pós Graduação","category":"Dividas","due_day":"30","monthly":{"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0,"2027-06":0.0,"2027-07":0.0,"2027-08":0.0,"2027-09":0.0,"2027-10":0.0,"2027-11":0.0,"2027-12":0.0},"total_year":0.0},{"id":"exp27_32","name":"IRRF","category":"Dividas","due_day":"30","monthly":{"2027-01":400.0,"2027-02":400.0,"2027-03":400.0,"2027-04":400.0,"2027-05":400.0,"2027-06":400.0,"2027-07":400.0,"2027-08":400.0,"2027-09":400.0,"2027-10":0.0,"2027-11":0.0,"2027-12":0.0},"total_year":3600.0},{"id":"exp27_33","name":"Concurso","category":"Dividas","due_day":"23","monthly":{"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0,"2027-06":0.0,"2027-07":0.0,"2027-08":0.0,"2027-09":0.0,"2027-10":0.0,"2027-11":0.0,"2027-12":0.0},"total_year":0.0},{"id":"exp27_34","name":"Havan","category":"Dividas","due_day":"20","monthly":{"2027-01":0.0,"2027-02":0.0,"2027-03":0.0,"2027-04":0.0,"2027-05":0.0,"2027-06":0.0,"2027-07":0.0,"2027-08":0.0,"2027-09":0.0,"2027-10":0.0,"2027-11":0.0,"2027-12":0.0},"total_year":0.0},{"id":"exp27_35","name":"Casamento","category":"Casamento","due_day":"Variável","monthly":{"2027-01":3000.0,"2027-02":3000.0,"2027-03":3000.0,"2027-04":3000.0,"2027-05":3000.0,"2027-06":0.0,"2027-07":0.0,"2027-08":0.0,"2027-09":0.0,"2027-10":0.0,"2027-11":0.0,"2027-12":3000.0},"total_year":18000.0},{"id":"exp27_36","name":"Music","category":"Assinatura","due_day":"7","monthly":{"2027-01":23.0,"2027-02":23.0,"2027-03":23.0,"2027-04":23.0,"2027-05":23.0,"2027-06":23.0,"2027-07":23.0,"2027-08":23.0,"2027-09":23.0,"2027-10":23.0,"2027-11":23.0,"2027-12":23.0},"total_year":276.0},{"id":"exp27_37","name":"Telefone Internet","category":"Assinatura","due_day":"20","monthly":{"2027-01":83.0,"2027-02":83.0,"2027-03":83.0,"2027-04":83.0,"2027-05":83.0,"2027-06":83.0,"2027-07":83.0,"2027-08":83.0,"2027-09":83.0,"2027-10":83.0,"2027-11":83.0,"2027-12":83.0},"total_year":996.0}]}};
+
+    // APPLICATION STATE WITH LOCALSTORAGE PERSISTENCE
+    let state = {
+      db: null,
+      currentMonth: '2025-11', // default month
+      activeTab: 'dashboard',
+      statusFilter: 'TODOS',
+      wedStatusFilter: 'TODOS',
+      projectionYear: '2026'
+    };
+
+    function loadState() {
+      const saved = localStorage.getItem('financas360_db');
+      if (saved) {
+        try {
+          state.db = JSON.parse(saved);
+        } catch (e) {
+          console.error('Error parsing localStorage, resetting to default', e);
+          state.db = JSON.parse(JSON.stringify(INITIAL_DB));
+        }
+      } else {
+        state.db = JSON.parse(JSON.stringify(INITIAL_DB));
+        saveState();
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem('financas360_db', JSON.stringify(state.db));
+      updateGlobalBadges();
+    }
+
+    // NUMBER FORMATTERS
+    function formatBRL(val) {
+      if (val === null || val === undefined || isNaN(val)) return 'R$ 0,00';
+      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val);
+    }
+
+    function formatDateBR(dateStr) {
+      if (!dateStr) return '-';
+      const parts = dateStr.split('-');
+      if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
+      return dateStr;
+    }
+
+    // TOAST
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const label = document.getElementById('toast-message');
+      label.innerText = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 2500);
+    }
+
+    // TAB SWITCHING
+    function switchTab(tabId) {
+      state.activeTab = tabId;
+      ['dashboard', 'contas', 'casamento', 'projecoes', 'backup'].forEach(t => {
+        const pane = document.getElementById(`pane-${t}`);
+        const btn = document.getElementById(`tab-btn-${t}`);
+        if (t === tabId) {
+          pane.classList.remove('hidden');
+          btn.classList.add('tab-active');
+        } else {
+          pane.classList.add('hidden');
+          btn.classList.remove('tab-active');
+        }
+      });
+
+      if (tabId === 'dashboard') renderDashboard();
+      if (tabId === 'contas') renderBillsTable();
+      if (tabId === 'casamento') renderWeddingContracts();
+      if (tabId === 'projecoes') renderProjectionTable();
+    }
+
+    // GLOBAL BADGES & SUMMARY
+    function updateGlobalBadges() {
+      // Calculate Wedding Total & Remaining
+      const contracts = state.db.wedding.contracts;
+      const totalContract = contracts.reduce((acc, c) => acc + (c.contract_value || 0), 0);
+      const totalPaid = contracts.reduce((acc, c) => acc + (c.paid_value || 0), 0);
+      const remaining = Math.max(0, totalContract - totalPaid);
+      const percent = totalContract > 0 ? (totalPaid / totalContract * 100).toFixed(1) : '0.0';
+
+      document.getElementById('nav-wedding-progress').innerText = `${percent}% Pago`;
+      document.getElementById('nav-wedding-remaining').innerText = formatBRL(remaining);
+
+      // Pending bills in active month
+      const pendingCount = state.db.monthly_bills.filter(b => b.competency === state.currentMonth && b.status !== 'PAGO').length;
+      document.getElementById('badge-contas-pendentes').innerText = pendingCount;
+    }
+
+    // ==========================================
+    // DASHBOARD RENDERING
+    // ==========================================
+    function renderDashboard() {
+      updateGlobalBadges();
+      const monthBills = state.db.monthly_bills.filter(b => b.competency === state.currentMonth);
+      
+      const totalMes = monthBills.reduce((acc, b) => acc + (b.amount || 0), 0);
+      const pagas = monthBills.filter(b => b.status === 'PAGO');
+      const abertas = monthBills.filter(b => b.status === 'EM ABERTO');
+      const vencidas = monthBills.filter(b => b.status === 'VENCIDO');
+
+      const pagoMes = pagas.reduce((acc, b) => acc + (b.amount || 0), 0);
+      const abertoMes = abertas.reduce((acc, b) => acc + (b.amount || 0), 0);
+      const vencidoMes = vencidas.reduce((acc, b) => acc + (b.amount || 0), 0);
+
+      document.getElementById('dashboard-date-indicator').innerText = getMonthLabel(state.currentMonth);
+      document.getElementById('dash-kpi-total-mes').innerText = formatBRL(totalMes);
+      document.getElementById('dash-kpi-qtd-contas').innerText = monthBills.length;
+      document.getElementById('dash-kpi-pago-mes').innerText = formatBRL(pagoMes);
+      document.getElementById('dash-kpi-qtd-pagas').innerText = pagas.length;
+      document.getElementById('dash-kpi-aberto-mes').innerText = formatBRL(abertoMes);
+      document.getElementById('dash-kpi-qtd-abertas').innerText = abertas.length;
+      document.getElementById('dash-kpi-vencido-mes').innerText = formatBRL(vencidoMes);
+      document.getElementById('dash-kpi-qtd-vencidas').innerText = vencidas.length;
+
+      // Wedding in Dashboard
+      const contracts = state.db.wedding.contracts;
+      const totalContract = contracts.reduce((acc, c) => acc + (c.contract_value || 0), 0);
+      const totalPaid = contracts.reduce((acc, c) => acc + (c.paid_value || 0), 0);
+      const remaining = Math.max(0, totalContract - totalPaid);
+      const percent = totalContract > 0 ? (totalPaid / totalContract * 100).toFixed(1) : '0.0';
+
+      document.getElementById('dash-wed-total').innerText = formatBRL(totalContract);
+      document.getElementById('dash-wed-paid').innerText = formatBRL(totalPaid);
+      document.getElementById('dash-wed-remaining').innerText = formatBRL(remaining);
+      document.getElementById('dash-wed-percent').innerText = `${percent}%`;
+      document.getElementById('dash-wed-bar').style.width = `${percent}%`;
+
+      // Priority totals
+      const p0 = contracts.filter(c => c.priority === 0).reduce((a, c) => a + c.contract_value, 0);
+      const p1 = contracts.filter(c => c.priority === 1).reduce((a, c) => a + c.contract_value, 0);
+      const p2 = contracts.filter(c => c.priority === 2).reduce((a, c) => a + c.contract_value, 0);
+      const p3 = contracts.filter(c => c.priority === 3 || c.priority === null).reduce((a, c) => a + c.contract_value, 0);
+
+      document.getElementById('dash-prio-0').innerText = formatBRL(p0);
+      document.getElementById('dash-prio-1').innerText = formatBRL(p1);
+      document.getElementById('dash-prio-2').innerText = formatBRL(p2);
+      document.getElementById('dash-prio-3').innerText = formatBRL(p3);
+
+      // Render table of upcoming / attention bills
+      const upcoming = [...monthBills].sort((a, b) => {
+        if (a.status === 'VENCIDO' && b.status !== 'VENCIDO') return -1;
+        if (b.status === 'VENCIDO' && a.status !== 'VENCIDO') return 1;
+        return (a.due_date || '').localeCompare(b.due_date || '');
+      }).slice(0, 6);
+
+      const tableBody = document.getElementById('dash-table-upcoming');
+      tableBody.innerHTML = '';
+      if (upcoming.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-slate-400">Nenhuma conta para este mês.</td></tr>';
+      } else {
+        upcoming.forEach(b => {
+          const row = document.createElement('tr');
+          row.className = 'hover:bg-slate-50 transition-colors';
+          const statusBadge = getStatusBadge(b.status);
+          row.innerHTML = `
+            <td class="py-2.5 font-medium text-slate-700">${formatDateBR(b.due_date)}</td>
+            <td class="py-2.5 font-bold text-slate-900">${b.description}</td>
+            <td class="py-2.5 text-slate-500">${b.person || 'Física'}</td>
+            <td class="py-2.5 text-right font-bold text-slate-900">${formatBRL(b.amount)}</td>
+            <td class="py-2.5 text-center">${statusBadge}</td>
+            <td class="py-2.5 text-right">
+              ${b.status !== 'PAGO' 
+                ? `<button onclick="toggleBillPaid('${b.id}')" class="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 px-2.5 py-1 rounded-lg text-[11px] font-bold transition-colors">Dar Baixa</button>` 
+                : `<span class="text-emerald-600 font-semibold text-[11px]">Liquidado</span>`}
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+      }
+    }
+
+    function getStatusBadge(status) {
+      if (status === 'PAGO') {
+        return '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>PAGO</span>';
+      }
+      if (status === 'VENCIDO') {
+        return '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>VENCIDO</span>';
+      }
+      return '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>EM ABERTO</span>';
+    }
+
+    function getMonthLabel(compStr) {
+      if (!compStr) return '-';
+      const [year, month] = compStr.split('-');
+      const monthsPt = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+      const mIdx = parseInt(month, 10) - 1;
+      return `${monthsPt[mIdx] || month} / ${year}`;
+    }
+
+    // ==========================================
+    // CONTAS DO MÊS RENDERING & LOGIC
+    // ==========================================
+    function initMonthSelector() {
+      // Gather all distinct months from bills and projections
+      const monthsSet = new Set(state.db.monthly_bills.map(b => b.competency).filter(Boolean));
+      state.db.projection_2026.months.forEach(m => monthsSet.add(m));
+      if (state.db.projection_2027) state.db.projection_2027.months.forEach(m => monthsSet.add(m));
+      
+      const sortedMonths = Array.from(monthsSet).sort();
+      const sel = document.getElementById('select-month');
+      sel.innerHTML = '';
+      sortedMonths.forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = m;
+        opt.innerText = getMonthLabel(m);
+        if (m === state.currentMonth) opt.selected = true;
+        sel.appendChild(opt);
+      });
+    }
+
+    function onSelectMonthChange(val) {
+      state.currentMonth = val;
+      renderBillsTable();
+      renderDashboard();
+    }
+
+    function changeMonth(delta) {
+      const sel = document.getElementById('select-month');
+      let idx = sel.selectedIndex + delta;
+      if (idx < 0) idx = 0;
+      if (idx >= sel.options.length) idx = sel.options.length - 1;
+      sel.selectedIndex = idx;
+      onSelectMonthChange(sel.value);
+    }
+
+    function setStatusFilter(status) {
+      state.statusFilter = status;
+      ['TODOS', 'EM-ABERTO', 'VENCIDO', 'PAGO'].forEach(s => {
+        const btn = document.getElementById(`btn-filter-status-${s}`);
+        if (s === status.replace(' ', '-')) {
+          btn.className = 'px-2.5 py-1 rounded-lg font-medium text-slate-900 bg-white shadow-xs';
+        } else {
+          btn.className = 'px-2.5 py-1 rounded-lg font-medium text-slate-600 hover:text-slate-900';
+        }
+      });
+      renderBillsTable();
+    }
+
+    function renderBillsTable() {
+      initMonthSelector();
+      const searchTerm = (document.getElementById('filter-search-contas').value || '').toLowerCase().trim();
+      const personFilter = document.getElementById('filter-person').value;
+
+      const allMonthBills = state.db.monthly_bills.filter(b => b.competency === state.currentMonth);
+
+      // Financial Strip
+      const totalMes = allMonthBills.reduce((acc, b) => acc + (b.amount || 0), 0);
+      const totalPago = allMonthBills.filter(b => b.status === 'PAGO').reduce((acc, b) => acc + (b.amount || 0), 0);
+      const totalAberto = allMonthBills.filter(b => b.status === 'EM ABERTO').reduce((acc, b) => acc + (b.amount || 0), 0);
+      const totalVencido = allMonthBills.filter(b => b.status === 'VENCIDO').reduce((acc, b) => acc + (b.amount || 0), 0);
+
+      document.getElementById('month-total-sum').innerText = formatBRL(totalMes);
+      document.getElementById('month-paid-sum').innerText = formatBRL(totalPago);
+      document.getElementById('month-open-sum').innerText = formatBRL(totalAberto);
+      document.getElementById('month-overdue-sum').innerText = formatBRL(totalVencido);
+
+      // Filtered records
+      let filtered = allMonthBills.filter(b => {
+        if (state.statusFilter !== 'TODOS' && b.status !== state.statusFilter) return false;
+        if (personFilter !== 'TODAS' && b.person !== personFilter) return false;
+        if (searchTerm) {
+          const matchDesc = (b.description || '').toLowerCase().includes(searchTerm);
+          const matchBank = (b.bank || '').toLowerCase().includes(searchTerm);
+          if (!matchDesc && !matchBank) return false;
+        }
+        return true;
+      });
+
+      // Sort by due date
+      filtered.sort((a, b) => (a.due_date || '').localeCompare(b.due_date || ''));
+
+      const tbody = document.getElementById('contas-table-body');
+      const emptyState = document.getElementById('contas-empty-state');
+      tbody.innerHTML = '';
+
+      if (filtered.length === 0) {
+        emptyState.classList.remove('hidden');
+      } else {
+        emptyState.classList.add('hidden');
+        filtered.forEach(b => {
+          const tr = document.createElement('tr');
+          tr.className = `hover:bg-slate-50 transition-colors ${b.status === 'PAGO' ? 'bg-emerald-50/20' : ''}`;
+          
+          tr.innerHTML = `
+            <td class="py-3 px-4 font-semibold text-slate-800">${formatDateBR(b.due_date)}</td>
+            <td class="py-3 px-4">
+              <span class="font-bold text-slate-900 block">${b.description}</span>
+              ${b.installment && b.installment !== 'x' ? `<span class="text-[10px] text-slate-400">Parcela: ${b.installment}</span>` : ''}
+            </td>
+            <td class="py-3 px-4">
+              <span class="px-2 py-0.5 rounded-md text-[10px] font-semibold ${b.person === 'Júridica' ? 'bg-purple-100 text-purple-800' : 'bg-slate-100 text-slate-700'}">
+                ${b.person || 'Física'}
+              </span>
+            </td>
+            <td class="py-3 px-4 text-slate-600">${b.bank || b.payment_type || '-'}</td>
+            <td class="py-3 px-4 text-right font-bold text-slate-900 text-sm">${formatBRL(b.amount)}</td>
+            <td class="py-3 px-4 text-center">${getStatusBadge(b.status)}</td>
+            <td class="py-3 px-4 text-slate-500">${b.paid_date ? formatDateBR(b.paid_date) : '-'}</td>
+            <td class="py-3 px-4 text-right">
+              <div class="inline-flex items-center gap-1.5">
+                ${b.status !== 'PAGO'
+                  ? `<button onclick="toggleBillPaid('${b.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 py-1 rounded-lg text-[11px] font-bold shadow-xs transition-colors flex items-center gap-1">
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                      Pagar
+                    </button>`
+                  : `<button onclick="toggleBillPaid('${b.id}')" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-2.5 py-1 rounded-lg text-[11px] font-medium transition-colors" title="Desfazer pagamento">
+                      Reabrir
+                    </button>`
+                }
+                <button onclick="deleteBill('${b.id}')" class="p-1 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors" title="Excluir Conta">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                </button>
+              </div>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+    }
+
+    function toggleBillPaid(billId) {
+      const bill = state.db.monthly_bills.find(b => b.id === billId);
+      if (!bill) return;
+      if (bill.status === 'PAGO') {
+        bill.status = 'EM ABERTO';
+        bill.paid_date = '';
+        showToast(`Conta "${bill.description}" reaberta.`);
+      } else {
+        bill.status = 'PAGO';
+        const today = new Date().toISOString().split('T')[0];
+        bill.paid_date = today;
+        showToast(`Pagamento registrado para "${bill.description}"!`);
+      }
+      saveState();
+      renderBillsTable();
+      renderDashboard();
+    }
+
+    function deleteBill(billId) {
+      if (!confirm('Deseja realmente excluir esta conta?')) return;
+      state.db.monthly_bills = state.db.monthly_bills.filter(b => b.id !== billId);
+      saveState();
+      showToast('Conta excluída com sucesso.');
+      renderBillsTable();
+      renderDashboard();
+    }
+
+    function saveNewBill() {
+      const desc = document.getElementById('new-bill-desc').value.trim();
+      const amount = parseFloat(document.getElementById('new-bill-amount').value);
+      const dueDate = document.getElementById('new-bill-due-date').value;
+      const comp = document.getElementById('new-bill-comp').value;
+      const person = document.getElementById('new-bill-person').value;
+      const bank = document.getElementById('new-bill-bank').value.trim();
+      const status = document.getElementById('new-bill-status').value;
+
+      if (!desc || isNaN(amount) || !dueDate || !comp) {
+        alert('Por favor, preencha todos os campos obrigatórios (*)');
+        return;
+      }
+
+      const newId = 'conta_' + Date.now();
+      const newBill = {
+        id: newId,
+        description: desc,
+        amount: roundVal(amount),
+        due_date: dueDate,
+        competency: comp,
+        person: person,
+        bank: bank,
+        status: status,
+        payment_type: 'A vista',
+        installment: '1/1',
+        paid_date: status === 'PAGO' ? new Date().toISOString().split('T')[0] : ''
+      };
+
+      state.db.monthly_bills.push(newBill);
+      saveState();
+      closeModal('modal-nova-conta');
+      showToast(`Conta "${desc}" cadastrada com sucesso!`);
+      
+      // If added to current month, re-render
+      if (comp === state.currentMonth) {
+        renderBillsTable();
+      } else {
+        state.currentMonth = comp;
+        renderBillsTable();
+      }
+      renderDashboard();
+    }
+
+    function autoPopulateMonthFromProjection() {
+      const targetMonth = state.currentMonth;
+      const [year, m] = targetMonth.split('-');
+      let projList = [];
+
+      if (year === '2026') projList = state.db.projection_2026.expenses;
+      else if (year === '2027' && state.db.projection_2027) projList = state.db.projection_2027.expenses;
+
+      if (!projList || projList.length === 0) {
+        alert(`Não há despesas projetadas na planilha para o ano ${year}.`);
+        return;
+      }
+
+      let addedCount = 0;
+      projList.forEach(item => {
+        const val = item.monthly ? item.monthly[targetMonth] : 0;
+        if (val && val > 0) {
+          // Check if already exists in this month
+          const exists = state.db.monthly_bills.some(b => b.competency === targetMonth && b.description.toLowerCase() === item.name.toLowerCase());
+          if (!exists) {
+            let dueDay = parseInt(item.due_day);
+            if (isNaN(dueDay) || dueDay < 1 || dueDay > 31) dueDay = 10;
+            const dueDayStr = dueDay < 10 ? `0${dueDay}` : `${dueDay}`;
+            const dueDate = `${targetMonth}-${dueDayStr}`;
+
+            state.db.monthly_bills.push({
+              id: 'conta_proj_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+              description: item.name,
+              amount: roundVal(val),
+              due_date: dueDate,
+              competency: targetMonth,
+              person: item.name.includes('MEI') || item.name.includes('Internet') ? 'Júridica' : 'Física',
+              bank: item.category || 'Geral',
+              status: 'EM ABERTO',
+              payment_type: 'A vista',
+              installment: 'x',
+              paid_date: ''
+            });
+            addedCount++;
+          }
+        }
+      });
+
+      if (addedCount > 0) {
+        saveState();
+        showToast(`${addedCount} contas projetadas importadas para ${getMonthLabel(targetMonth)}!`);
+        renderBillsTable();
+        renderDashboard();
+      } else {
+        alert(`Todas as contas projetadas para ${getMonthLabel(targetMonth)} já estavam presentes no sistema.`);
+      }
+    }
+
+    // ==========================================
+    // GESTÃO DO CASAMENTO RENDERING & LOGIC
+    // ==========================================
+    function setWedStatusFilter(status) {
+      state.wedStatusFilter = status;
+      ['TODOS', 'Quitado', 'Em-Pagamento', 'A-Iniciar'].forEach(s => {
+        const btn = document.getElementById(`btn-wed-status-${s}`);
+        if (s === status.replace(' ', '-')) {
+          btn.className = 'px-2.5 py-1 rounded-lg font-medium text-slate-900 bg-white shadow-xs';
+        } else {
+          btn.className = 'px-2.5 py-1 rounded-lg font-medium text-slate-600 hover:text-slate-900';
+        }
+      });
+      renderWeddingContracts();
+    }
+
+    function renderWeddingContracts() {
+      const contracts = state.db.wedding.contracts;
+      const searchTerm = (document.getElementById('filter-search-wed').value || '').toLowerCase().trim();
+      const prioFilter = document.getElementById('filter-wed-prio').value;
+
+      // Global calculations
+      const totalContract = contracts.reduce((acc, c) => acc + (c.contract_value || 0), 0);
+      const totalPaid = contracts.reduce((acc, c) => acc + (c.paid_value || 0), 0);
+      const remaining = Math.max(0, totalContract - totalPaid);
+      const percent = totalContract > 0 ? (totalPaid / totalContract * 100).toFixed(1) : '0.0';
+
+      const quitados = contracts.filter(c => c.status === 'Quitado').length;
+      const andamento = contracts.filter(c => c.status === 'Em Pagamento').length;
+      const iniciar = contracts.filter(c => c.status === 'A Iniciar').length;
+
+      document.getElementById('wed-banner-percent').innerText = `${percent}%`;
+      document.getElementById('wed-banner-paid').innerText = formatBRL(totalPaid);
+      document.getElementById('wed-banner-remaining').innerText = formatBRL(remaining);
+      document.getElementById('wed-banner-progress-bar').style.width = `${percent}%`;
+
+      document.getElementById('wed-kpi-total').innerText = formatBRL(totalContract);
+      document.getElementById('wed-kpi-quitados').innerText = `${quitados} contratos`;
+      document.getElementById('wed-kpi-andamento').innerText = `${andamento} contratos`;
+      document.getElementById('wed-kpi-iniciar').innerText = `${iniciar} contratos`;
+
+      // Filtered contracts
+      const filtered = contracts.filter(c => {
+        if (state.wedStatusFilter !== 'TODOS' && c.status !== state.wedStatusFilter) return false;
+        if (prioFilter !== 'TODAS' && String(c.priority) !== prioFilter) return false;
+        if (searchTerm && !(c.name || '').toLowerCase().includes(searchTerm)) return false;
+        return true;
+      });
+
+      // Sort: Priority 0 first, then 1, 2, 3
+      filtered.sort((a, b) => (a.priority ?? 9) - (b.priority ?? 9));
+
+      const grid = document.getElementById('wedding-contracts-grid');
+      grid.innerHTML = '';
+
+      filtered.forEach(c => {
+        const itemPercent = c.contract_value > 0 ? Math.min(100, (c.paid_value / c.contract_value * 100)).toFixed(1) : '0.0';
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between hover:border-pink-300 transition-all';
+
+        let prioBadge = '';
+        if (c.priority === 0) prioBadge = '<span class="badge-p0 text-[10px] font-bold px-2 py-0.5 rounded-full">P0 - Urgente</span>';
+        else if (c.priority === 1) prioBadge = '<span class="badge-p1 text-[10px] font-bold px-2 py-0.5 rounded-full">P1 - Alta</span>';
+        else if (c.priority === 2) prioBadge = '<span class="badge-p2 text-[10px] font-bold px-2 py-0.5 rounded-full">P2 - Média</span>';
+        else prioBadge = '<span class="badge-p3 text-[10px] font-bold px-2 py-0.5 rounded-full">P3 - Baixa</span>';
+
+        let statusClass = 'bg-amber-100 text-amber-800';
+        if (c.status === 'Quitado') statusClass = 'bg-emerald-100 text-emerald-800';
+        else if (c.status === 'A Iniciar') statusClass = 'bg-slate-100 text-slate-700';
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-start justify-between gap-2 mb-2">
+              <div>
+                <h4 class="font-extrabold text-slate-900 text-base leading-tight">${c.name}</h4>
+                <div class="flex items-center gap-2 mt-1">
+                  ${prioBadge}
+                  <span class="text-[11px] text-slate-500">Venc: <b>${c.due_day || 'Flexível'}</b></span>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${statusClass}">
+                ${c.status}
+              </span>
+            </div>
+
+            <!-- Financial Values Strip -->
+            <div class="grid grid-cols-3 gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-100 my-3 text-xs">
+              <div>
+                <span class="text-slate-400 block text-[10px]">Contrato</span>
+                <span class="font-bold text-slate-800 text-xs">${formatBRL(c.contract_value)}</span>
+              </div>
+              <div>
+                <span class="text-emerald-600 block text-[10px]">Já Pago</span>
+                <span class="font-bold text-emerald-700 text-xs">${formatBRL(c.paid_value)}</span>
+              </div>
+              <div>
+                <span class="text-amber-600 block text-[10px]">Falta Pagar</span>
+                <span class="font-bold text-amber-700 text-xs">${formatBRL(c.remaining_value)}</span>
+              </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="space-y-1 mb-4">
+              <div class="flex justify-between items-center text-[11px]">
+                <span class="text-slate-500">Concluído</span>
+                <span class="font-bold text-slate-700">${itemPercent}%</span>
+              </div>
+              <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                <div class="bg-gradient-to-r from-emerald-500 to-teal-400 h-2 rounded-full progress-bar-fill" style="width: ${itemPercent}%"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+            <button onclick="openRegisterPaymentModal('${c.id}')" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-xl text-xs font-semibold shadow-xs transition-colors flex items-center justify-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              Pagar Parcela
+            </button>
+            <button onclick="deleteWeddingContract('${c.id}')" class="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors" title="Excluir Contrato">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      renderWeddingScheduleTable();
+    }
+
+    function renderWeddingScheduleTable() {
+      const months = state.db.wedding.months;
+      const contracts = state.db.wedding.contracts;
+      const headerRow = document.getElementById('wed-schedule-header');
+      
+      // Clear extra month th
+      headerRow.innerHTML = '<th class="py-2.5 px-3 sticky left-0 bg-slate-50 z-10">Fornecedor</th>';
+      months.forEach(m => {
+        const th = document.createElement('th');
+        th.className = 'py-2.5 px-3 text-right font-medium text-slate-600';
+        th.innerText = m.replace('2026-', 'Fev/26').replace('2027-', 'Jan/27').substring(0, 7);
+        headerRow.appendChild(th);
+      });
+      headerRow.innerHTML += `
+        <th class="py-2.5 px-3 text-right font-bold text-emerald-700">Total Pago</th>
+        <th class="py-2.5 px-3 text-right font-bold text-amber-700">Falta Pagar</th>
+        <th class="py-2.5 px-3 text-right font-bold text-slate-900">Contrato</th>
+      `;
+
+      const tbody = document.getElementById('wed-schedule-body');
+      tbody.innerHTML = '';
+
+      contracts.forEach(c => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 transition-colors';
+        let cols = `<td class="py-2 px-3 font-bold text-slate-800 sticky left-0 bg-white">${c.name}</td>`;
+        months.forEach(m => {
+          const val = c.monthly_schedule ? (c.monthly_schedule[m] || 0) : 0;
+          cols += `<td class="py-2 px-3 text-right ${val > 0 ? 'font-semibold text-slate-900' : 'text-slate-300'}">${val > 0 ? formatBRL(val) : '-'}</td>`;
+        });
+        cols += `
+          <td class="py-2 px-3 text-right font-bold text-emerald-600">${formatBRL(c.paid_value)}</td>
+          <td class="py-2 px-3 text-right font-bold text-amber-600">${formatBRL(c.remaining_value)}</td>
+          <td class="py-2 px-3 text-right font-bold text-slate-900">${formatBRL(c.contract_value)}</td>
+        `;
+        tr.innerHTML = cols;
+        tbody.appendChild(tr);
+      });
+
+      // Footer with monthly sums
+      const footer = document.getElementById('wed-schedule-footer');
+      let footCols = '<tr class="text-slate-900 font-bold"><td class="py-2.5 px-3 sticky left-0 bg-slate-50">TOTAL MENSAL</td>';
+      let totalScheduleAll = 0;
+      months.forEach(m => {
+        let mSum = 0;
+        contracts.forEach(c => {
+          mSum += c.monthly_schedule ? (c.monthly_schedule[m] || 0) : 0;
+        });
+        totalScheduleAll += mSum;
+        footCols += `<td class="py-2.5 px-3 text-right text-indigo-700">${mSum > 0 ? formatBRL(mSum) : '-'}</td>`;
+      });
+      const totalPaidAll = contracts.reduce((a, c) => a + c.paid_value, 0);
+      const totalRemAll = contracts.reduce((a, c) => a + c.remaining_value, 0);
+      const totalContAll = contracts.reduce((a, c) => a + c.contract_value, 0);
+      footCols += `
+        <td class="py-2.5 px-3 text-right text-emerald-700">${formatBRL(totalPaidAll)}</td>
+        <td class="py-2.5 px-3 text-right text-amber-700">${formatBRL(totalRemAll)}</td>
+        <td class="py-2.5 px-3 text-right text-slate-900">${formatBRL(totalContAll)}</td>
+      </tr>`;
+      footer.innerHTML = footCols;
+    }
+
+    function openRegisterPaymentModal(contractId) {
+      const c = state.db.wedding.contracts.find(x => x.id === contractId);
+      if (!c) return;
+      document.getElementById('modal-pay-contract-id').value = c.id;
+      document.getElementById('modal-pay-contract-name').innerText = c.name;
+      document.getElementById('modal-pay-total-val').innerText = formatBRL(c.contract_value);
+      document.getElementById('modal-pay-paid-val').innerText = formatBRL(c.paid_value);
+      document.getElementById('modal-pay-remaining-val').innerText = formatBRL(c.remaining_value);
+      document.getElementById('modal-pay-amount').value = c.remaining_value > 0 ? c.remaining_value : '';
+      document.getElementById('modal-pay-date').value = new Date().toISOString().split('T')[0];
+      document.getElementById('modal-pay-notes').value = '';
+      openModal('modal-pagar-contrato');
+    }
+
+    function confirmRegisterContractPayment() {
+      const contractId = document.getElementById('modal-pay-contract-id').value;
+      const amount = parseFloat(document.getElementById('modal-pay-amount').value);
+      const date = document.getElementById('modal-pay-date').value;
+      const notes = document.getElementById('modal-pay-notes').value.trim();
+
+      if (isNaN(amount) || amount <= 0) {
+        alert('Informe um valor válido para o pagamento.');
+        return;
+      }
+
+      const c = state.db.wedding.contracts.find(x => x.id === contractId);
+      if (!c) return;
+
+      c.paid_value = roundVal(c.paid_value + amount);
+      c.remaining_value = Math.max(0, roundVal(c.contract_value - c.paid_value));
+      
+      if (c.remaining_value <= 0) {
+        c.status = 'Quitado';
+      } else {
+        c.status = 'Em Pagamento';
+      }
+
+      // Also create an entry in monthly_bills for operational tracking!
+      const compStr = date.substring(0, 7);
+      state.db.monthly_bills.push({
+        id: 'conta_wed_pay_' + Date.now(),
+        description: `Casamento: ${c.name} ${notes ? '(' + notes + ')' : ''}`,
+        amount: amount,
+        due_date: date,
+        competency: compStr,
+        person: 'Física',
+        bank: 'Casamento',
+        status: 'PAGO',
+        payment_type: 'A vista',
+        installment: 'Parcela',
+        paid_date: date
+      });
+
+      saveState();
+      closeModal('modal-pagar-contrato');
+      showToast(`Pagamento de ${formatBRL(amount)} registrado em "${c.name}"!`);
+      renderWeddingContracts();
+      renderBillsTable();
+      renderDashboard();
+    }
+
+    function saveNewWeddingContract() {
+      const name = document.getElementById('new-wed-name').value.trim();
+      const total = parseFloat(document.getElementById('new-wed-total').value);
+      const paid = parseFloat(document.getElementById('new-wed-paid').value) || 0;
+      const prio = parseInt(document.getElementById('new-wed-prio').value);
+      const day = document.getElementById('new-wed-day').value.trim() || 'Flexível';
+
+      if (!name || isNaN(total) || total <= 0) {
+        alert('Por favor informe o nome do fornecedor e o valor total do contrato.');
+        return;
+      }
+
+      const remaining = Math.max(0, roundVal(total - paid));
+      let status = 'A Iniciar';
+      if (remaining <= 0) status = 'Quitado';
+      else if (paid > 0) status = 'Em Pagamento';
+
+      const newContract = {
+        id: 'wed_' + Date.now(),
+        name: name,
+        priority: prio,
+        due_day: day,
+        contract_value: roundVal(total),
+        paid_value: roundVal(paid),
+        remaining_value: roundVal(remaining),
+        status: status,
+        monthly_schedule: {}
+      };
+
+      state.db.wedding.contracts.push(newContract);
+      saveState();
+      closeModal('modal-novo-contrato');
+      showToast(`Contrato "${name}" adicionado com sucesso!`);
+      renderWeddingContracts();
+      renderDashboard();
+    }
+
+    function deleteWeddingContract(contractId) {
+      const c = state.db.wedding.contracts.find(x => x.id === contractId);
+      if (!c) return;
+      if (!confirm(`Deseja realmente excluir o contrato "${c.name}"?`)) return;
+      state.db.wedding.contracts = state.db.wedding.contracts.filter(x => x.id !== contractId);
+      saveState();
+      showToast(`Contrato "${c.name}" excluído.`);
+      renderWeddingContracts();
+      renderDashboard();
+    }
+
+    // ==========================================
+    // PROJEÇÕES (2026/2027) RENDERING
+    // ==========================================
+    function setProjectionYear(year) {
+      state.projectionYear = year;
+      document.getElementById('btn-proj-2026').className = year === '2026' ? 'px-4 py-1.5 rounded-lg bg-white text-slate-900 shadow-xs' : 'px-4 py-1.5 rounded-lg text-slate-600 hover:text-slate-900';
+      document.getElementById('btn-proj-2027').className = year === '2027' ? 'px-4 py-1.5 rounded-lg bg-white text-slate-900 shadow-xs' : 'px-4 py-1.5 rounded-lg text-slate-600 hover:text-slate-900';
+      document.getElementById('proj-table-title').innerText = `Demonstrativo Mensal de Fluxo de Caixa (${year})`;
+      renderProjectionTable();
+    }
+
+    function renderProjectionTable() {
+      const year = state.projectionYear;
+      const projData = year === '2026' ? state.db.projection_2026 : state.db.projection_2027;
+      if (!projData) return;
+
+      const months = projData.months;
+      const revenues = projData.revenues || [];
+      const expenses = projData.expenses || [];
+
+      // Header row
+      const headerRow = document.getElementById('proj-header-row');
+      headerRow.innerHTML = '<th class="py-2.5 px-3 sticky left-0 bg-slate-50 z-10">Item / Categoria</th><th class="py-2.5 px-2 text-center">Dia</th>';
+      const monthNamesPt = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+      months.forEach((m, idx) => {
+        const th = document.createElement('th');
+        th.className = 'py-2.5 px-3 text-right font-medium text-slate-600';
+        th.innerText = `${monthNamesPt[idx]}/${year.substring(2)}`;
+        headerRow.appendChild(th);
+      });
+      headerRow.innerHTML += '<th class="py-2.5 px-3 text-right font-bold text-slate-900">Total Ano</th>';
+
+      const tbody = document.getElementById('proj-table-body');
+      tbody.innerHTML = '';
+
+      // 1. REVENUE SECTION
+      const revHeaderTr = document.createElement('tr');
+      revHeaderTr.className = 'bg-emerald-50/70 font-bold text-emerald-900 text-xs';
+      revHeaderTr.innerHTML = `<td colspan="${months.length + 3}" class="py-2 px-3">📈 RECEITAS PROJETADAS</td>`;
+      tbody.appendChild(revHeaderTr);
+
+      const totalRevPerMonth = new Array(months.length).fill(0);
+      revenues.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 transition-colors text-slate-800';
+        let cols = `<td class="py-2 px-3 font-semibold sticky left-0 bg-white">${r.name}</td><td class="py-2 px-2 text-center text-slate-400">${r.day || '-'}</td>`;
+        let rowSum = 0;
+        months.forEach((m, idx) => {
+          const val = r.monthly ? (r.monthly[m] || 0) : 0;
+          rowSum += val;
+          totalRevPerMonth[idx] += val;
+          cols += `<td class="py-2 px-3 text-right text-emerald-700 font-medium">${val > 0 ? formatBRL(val) : '-'}</td>`;
+        });
+        cols += `<td class="py-2 px-3 text-right font-bold text-emerald-800">${formatBRL(rowSum)}</td>`;
+        tr.innerHTML = cols;
+        tbody.appendChild(tr);
+      });
+
+      // Total Revenue Row
+      const totRevTr = document.createElement('tr');
+      totRevTr.className = 'bg-emerald-100/50 font-bold text-emerald-950 border-b border-emerald-200';
+      let totRevCols = `<td class="py-2 px-3 sticky left-0 bg-emerald-100/50">SUBTOTAL RECEITAS</td><td></td>`;
+      const sumRevYear = totalRevPerMonth.reduce((a, b) => a + b, 0);
+      totalRevPerMonth.forEach(val => {
+        totRevCols += `<td class="py-2 px-3 text-right">${formatBRL(val)}</td>`;
+      });
+      totRevCols += `<td class="py-2 px-3 text-right">${formatBRL(sumRevYear)}</td>`;
+      totRevTr.innerHTML = totRevCols;
+      tbody.appendChild(totRevTr);
+
+      // 2. EXPENSES SECTION
+      const expHeaderTr = document.createElement('tr');
+      expHeaderTr.className = 'bg-slate-100/80 font-bold text-slate-900 text-xs';
+      expHeaderTr.innerHTML = `<td colspan="${months.length + 3}" class="py-2 px-3">📉 DESPESAS & COMPROMISSOS PROJETADOS</td>`;
+      tbody.appendChild(expHeaderTr);
+
+      const totalExpPerMonth = new Array(months.length).fill(0);
+      expenses.forEach(e => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 transition-colors text-slate-800';
+        let cols = `<td class="py-2 px-3 font-medium sticky left-0 bg-white">
+          ${e.name}
+          <span class="text-[10px] text-slate-400 block">${e.category || ''}</span>
+        </td><td class="py-2 px-2 text-center text-slate-400">${e.due_day || '-'}</td>`;
+        let rowSum = 0;
+        months.forEach((m, idx) => {
+          const val = e.monthly ? (e.monthly[m] || 0) : 0;
+          rowSum += val;
+          totalExpPerMonth[idx] += val;
+          cols += `<td class="py-2 px-3 text-right ${val > 0 ? 'text-slate-900' : 'text-slate-300'}">${val > 0 ? formatBRL(val) : '-'}</td>`;
+        });
+        cols += `<td class="py-2 px-3 text-right font-bold text-slate-900">${formatBRL(rowSum)}</td>`;
+        tr.innerHTML = cols;
+        tbody.appendChild(tr);
+      });
+
+      // Total Expenses Row
+      const totExpTr = document.createElement('tr');
+      totExpTr.className = 'bg-rose-100/40 font-bold text-rose-950 border-t border-rose-200';
+      let totExpCols = `<td class="py-2.5 px-3 sticky left-0 bg-rose-100/40">SUBTOTAL DESPESAS</td><td></td>`;
+      const sumExpYear = totalExpPerMonth.reduce((a, b) => a + b, 0);
+      totalExpPerMonth.forEach(val => {
+        totExpCols += `<td class="py-2.5 px-3 text-right text-rose-700">${formatBRL(val)}</td>`;
+      });
+      totExpCols += `<td class="py-2.5 px-3 text-right text-rose-800">${formatBRL(sumExpYear)}</td>`;
+      totExpTr.innerHTML = totExpCols;
+      tbody.appendChild(totExpTr);
+
+      // 3. NET BALANCE FOOTER (SALDO MENSAL & ACUMULADO)
+      const footer = document.getElementById('proj-table-footer');
+      let saldoCols = `<tr class="bg-slate-900 text-white font-extrabold"><td class="py-3 px-3 sticky left-0 bg-slate-900">SALDO LÍQUIDO MENSAL</td><td></td>`;
+      let saldoYearSum = 0;
+      months.forEach((m, idx) => {
+        const net = totalRevPerMonth[idx] - totalExpPerMonth[idx];
+        saldoYearSum += net;
+        const colorClass = net >= 0 ? 'text-emerald-400' : 'text-rose-400';
+        saldoCols += `<td class="py-3 px-3 text-right ${colorClass}">${formatBRL(net)}</td>`;
+      });
+      saldoCols += `<td class="py-3 px-3 text-right ${saldoYearSum >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${formatBRL(saldoYearSum)}</td></tr>`;
+      footer.innerHTML = saldoCols;
+    }
+
+    // ==========================================
+    // BACKUP & EXPORT
+    // ==========================================
+    function exportDataJSON() {
+      const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(state.db, null, 2));
+      const dlAnchor = document.createElement('a');
+      dlAnchor.setAttribute('href', dataStr);
+      dlAnchor.setAttribute('download', `financas_casamento_backup_${new Date().toISOString().split('T')[0]}.json`);
+      dlAnchor.click();
+      showToast('Backup exportado com sucesso!');
+    }
+
+    function importDataJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (parsed && parsed.wedding && parsed.monthly_bills) {
+            state.db = parsed;
+            saveState();
+            showToast('Backup importado com sucesso!');
+            switchTab('dashboard');
+          } else {
+            alert('Arquivo JSON inválido. Estrutura não reconhecida.');
+          }
+        } catch (err) {
+          alert('Erro ao ler arquivo JSON: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function resetToInitialData() {
+      if (!confirm('Deseja realmente resetar todos os dados para os valores originais da planilha Financas pessoais.xlsx? Quaisquer alterações não exportadas serão perdidas.')) return;
+      state.db = JSON.parse(JSON.stringify(INITIAL_DB));
+      saveState();
+      showToast('Dados restaurados com base na planilha original!');
+      switchTab('dashboard');
+    }
+
+    // MODAL UTILS
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function roundVal(num) {
+      return Math.round((num + Number.EPSILON) * 100) / 100;
+    }
+
+    // INIT
+    window.addEventListener('DOMContentLoaded', () => {
+      loadState();
+      initMonthSelector();
+      renderDashboard();
+    });
+  </script>
+</body>
+</html>
